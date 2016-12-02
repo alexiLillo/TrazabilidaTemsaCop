@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cl.fosforos.trazabilidadtemc">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Trazabilidad Temsa"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CaptureActivityAnyOrientation"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Seleccion_Inicio"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Seleccion_Final"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Seleccion_Ini_Fin"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Marcado_Inicio"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Marcado_Final"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Fajado_Inicio"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Fajado_Final"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Paletizado"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Print"></activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_print"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="cl.fosforos.trazabilidadtemc.Print">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="printTest"
+        android:text="Imprimir etiqueta" />
+
+    <LinearLayout
+        android:id="@+id/layoutPrint"
+        android:layout_width="800px"
+        android:layout_height="800px"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:gravity="right"
+            android:layout_width="150px"
+            android:layout_height="800px"
+            android:background="#fff"
+            android:orientation="vertical">
+
+            <LinearLayout
+
+                android:layout_width="10px"
+                android:layout_height="match_parent"
+                android:background="#000"
+                android:orientation="horizontal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="600px"
+            android:layout_height="800px"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="600px"
+                android:layout_height="265px"
+                android:background="#fff"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Etiqueta de prueba"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GRANEL SIN MARCA"
+                    android:textColor="#000"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="#000"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="600px"
+                android:layout_height="265px"
+                android:background="#fff"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/im1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="025858-684165"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="#000"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="600px"
+                android:layout_height="265px"
+                android:background="#fff"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LOTE: P010201300-123121312/23423"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MANTENGASE EN UN LUGAR PRESCO Y SECO"
+                    android:textColor="#000"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

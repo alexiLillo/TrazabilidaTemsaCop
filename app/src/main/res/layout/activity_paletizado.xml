@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_paletizado"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="cl.fosforos.trazabilidadtemc.Paletizado">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="Turno "
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="A"
+            android:id="@+id/txtTurno"
+            />
+
+        <TextView
+            android:layout_marginLeft="5sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="Desde "
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="99-09-2016 08:30 hrs"
+            android:textSize="12sp"
+            android:id="@+id/txtTurnoInicio"
+            />
+
+        <TextView
+            android:layout_marginLeft="5sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="Hasta "
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="99-09-2016 08:30 hrs"
+            android:textSize="12sp"
+            android:id="@+id/txtTurnoFinal"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Spinner
+            android:layout_marginLeft="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:id="@+id/spinerPTerminado"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="19sp"
+            android:layout_width="130sp"
+            android:layout_height="wrap_content"
+            android:text="Operador"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="15sp"
+            android:id="@+id/txtOperador"
+            android:textAlignment="textStart"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="19sp"
+            android:layout_width="130sp"
+            android:layout_height="wrap_content"
+            android:text="Control Calidad"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="15sp"
+            android:id="@+id/txtCCalidad"
+            android:textAlignment="textStart"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="19sp"
+            android:layout_width="130sp"
+            android:layout_height="wrap_content"
+            android:text="Código Pallet"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="15sp"
+            android:id="@+id/txtCodPallet"
+            android:textAlignment="textStart"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="0sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="19sp"
+            android:layout_width="130sp"
+            android:layout_height="wrap_content"
+            android:text="Correlativo (Mes)"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="15sp"
+            android:id="@+id/txtCorrelativo"
+            android:textAlignment="textStart"
+            />
+
+        <Button
+            android:text="Buscar"
+            android:layout_width="70sp"
+            android:layout_height="30sp"
+            android:id="@+id/botBuscaCorre"
+            android:textSize="10sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="0sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="19sp"
+            android:layout_width="130sp"
+            android:layout_height="wrap_content"
+            android:text="Cantidad de Cajas"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="15sp"
+            android:id="@+id/txtCantCajas"
+            android:textAlignment="textStart"
+            />
+
+        <Button
+            android:text="Agregar"
+            android:layout_width="70sp"
+            android:layout_height="30sp"
+            android:id="@+id/botAgregaCaj"
+            android:textSize="10sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="90sp"
+        android:layout_marginRight="90sp">
+
+        <Button
+            android:layout_marginTop="15sp"
+            android:text="Capturar Código QR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/botLeerQR"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:text="Grabar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/botGrabar"
+        android:layout_marginTop="40sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="12sp"
+            android:id="@+id/txtTurnoCodigo"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12/12/1234"
+            android:textSize="12sp"
+            android:id="@+id/txtDiaProceso"
+            android:visibility="invisible"
+            />
+    </LinearLayout>
+</LinearLayout>

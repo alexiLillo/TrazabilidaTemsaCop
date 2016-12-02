@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        applicationId "cl.fosforos.trazabilidadtemc"
+        minSdkVersion 21
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/jtds-1.2.7.jar')
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.journeyapps:zxing-android-embedded:3.1.0@aar'
+    compile 'com.google.zxing:core:3.2.0'
+
+    compile files('libs/commons-io-2.2.jar')
+    compile files('libs/commons-net-3.1.jar')
+    compile files('libs/commons-validator-1.4.0.jar')
+    compile files('libs/httpcore-4.3.1.jar')
+    compile files('libs/httpmime-4.3.2.jar')
+    compile files('libs/jackson-annotations-2.2.3.jar')
+    compile files('libs/jackson-core-2.2.3.jar')
+    compile files('libs/jackson-databind-2.2.3.jar')
+    compile files('libs/opencsv-2.2.jar')
+    compile files('libs/snmp6_1.jar')
+    compile files('libs/ZSDK_ANDROID_API.jar')
+}
