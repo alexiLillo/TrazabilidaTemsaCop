@@ -3,6 +3,7 @@ package cl.fosforos.trazabilidadtemc;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -204,7 +205,9 @@ public class Fajado_Final extends AppCompatActivity {
                     if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {
                         txtoperador.setText(scanContent);
                         escaneos = 2;
+                        ok();
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO NO CORRESPONDE A OPERADOR", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO OPERADOR");
                     }
@@ -215,18 +218,22 @@ public class Fajado_Final extends AppCompatActivity {
                         if (comprobarCajaDestino(scanContent)) {
                             txtCajaDestino.setText(scanContent);
                             escaneos = 1;
+                            ok();
                             scan("ESCANEAR CODIGO OPERADOR");
                         } else {
+                            error();
                             Toast.makeText(this, "CODIGO CAJA DESTINO INVALIDO", Toast.LENGTH_SHORT).show();
                             scan("ESCANEAR CAJA DESTINO");
                         }
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO NO CORRESPONDE A CAJA DESTINO", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CAJA DESTINO");
                     }
                 }
             }
         } else {
+            error();
             Toast.makeText(this, "NO SE ESCANEO NINGUN CODIGO", Toast.LENGTH_SHORT).show();
         }
     }
@@ -286,11 +293,23 @@ public class Fajado_Final extends AppCompatActivity {
     public void scan(String titulo) {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setPrompt(titulo);
-        scanIntegrator.setBeepEnabled(true);
+        scanIntegrator.setBeepEnabled(false);
         scanIntegrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         scanIntegrator.setOrientationLocked(true);
         scanIntegrator.setBarcodeImageEnabled(true);
         scanIntegrator.initiateScan();
+    }
+
+    private void ok() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.ok);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
+
+    private void error() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.error);
+        mp.setVolume(50, 50);
+        mp.start();
     }
 
     //Devuele un java.util.Date desde un String en formato dd/MM/yyyy HH:mm

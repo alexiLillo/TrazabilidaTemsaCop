@@ -3,6 +3,7 @@ package cl.fosforos.trazabilidadtemc;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -184,6 +185,7 @@ public class Fajado_Inicio extends AppCompatActivity {
                             Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery(query);
                             while (rs.next()) {
+                                ok();
                                 txtcodmaquina.setText(rs.getString("MaqFAJ_Codigo"));
                             }
                             con.close();
@@ -192,10 +194,12 @@ public class Fajado_Inicio extends AppCompatActivity {
                             escaneos = 2;
                             txtMaquina.setText("");
                             txtcodmaquina.setText("");
+                            error();
                             Toast.makeText(this, "CODIGO DE MAQUINA INVALIDO", Toast.LENGTH_SHORT).show();
                             scan("ESCANEAR CODIGO MAQUINA");
                         }
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO DE MAQUINA INVALIDO", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO MAQUINA");
                     }
@@ -205,8 +209,10 @@ public class Fajado_Inicio extends AppCompatActivity {
                     if (scanContent.startsWith("EN") && !txtCajaOrigen.getText().toString().equals("") && !scanContent.equals(txtCajaOrigen.getText())) {
                         txtCajaDestino.setText(scanContent);
                         escaneos = 2;
+                        ok();
                         scan("ESCANEAR CODIGO MAQUINA");
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CAJA DESTINO");
                     }
@@ -218,15 +224,18 @@ public class Fajado_Inicio extends AppCompatActivity {
                         if (procedenciaCaja(scanContent)) {
                             txtCajaOrigen.setText(scanContent);
                             escaneos = 1;
+                            ok();
                             scan("ESCANEAR CAJA DESTINO");
                         } else {
-                            scan("ESCANEAR CAJA DE ORIGEN");
+                            error();
                             Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
+                            scan("ESCANEAR CAJA DE ORIGEN");
                         }
                     }
                 }
             }
         } else {
+            error();
             Toast.makeText(this, "NO SE ESCANEO NINGUN CODIGO", Toast.LENGTH_SHORT).show();
         }
     }
@@ -320,14 +329,25 @@ public class Fajado_Inicio extends AppCompatActivity {
         }
     }
 
-
     public void scan(String titulo) {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setPrompt(titulo);
-        scanIntegrator.setBeepEnabled(true);
+        scanIntegrator.setBeepEnabled(false);
         scanIntegrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         scanIntegrator.setOrientationLocked(true);
         scanIntegrator.setBarcodeImageEnabled(true);
         scanIntegrator.initiateScan();
+    }
+
+    private void ok() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.ok);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
+
+    private void error() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.error);
+        mp.setVolume(50, 50);
+        mp.start();
     }
 }

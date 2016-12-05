@@ -3,6 +3,7 @@ package cl.fosforos.trazabilidadtemc;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -262,6 +263,7 @@ public class Marcado_Inicio extends AppCompatActivity {
                             Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery(query);
                             while (rs.next()) {
+                                ok();
                                 escaneos = 3;
                                 txtcodmaquina.setText(rs.getString("MaqMar_Codigo"));
                             }
@@ -270,11 +272,13 @@ public class Marcado_Inicio extends AppCompatActivity {
                             escaneos = 2;
                             txtcodmaquina.setText("");
                             txtMaquina.setText("");
+                            error();
                             Toast.makeText(this, "ERROR AL LEER CODIGO DE MAQUINA", Toast.LENGTH_SHORT).show();
                             scan("ESCANEAR CODIGO MAQUINA");
                             System.out.println("------>" + ex.toString());
                         }
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO DE MAQUINA INVALIDO", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO MAQUINA");
                     }
@@ -284,8 +288,10 @@ public class Marcado_Inicio extends AppCompatActivity {
                     if (scanContent.startsWith("EN") && !txtCajaOrigen.getText().equals("") && !scanContent.equals(txtCajaOrigen.getText())) {
                         txtCajaDestino.setText(scanContent);
                         escaneos = 2;
+                        ok();
                         scan("ESCANEAR CODIGO MAQUINA");
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO CAJA INVALIDO", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CAJA DESTINO");
                     }
@@ -313,12 +319,14 @@ public class Marcado_Inicio extends AppCompatActivity {
                                 txtproducto.setText(rs.getString("PB_Descrip"));
                                 txtCajaTrazable.setText(rs.getString("Caj_LetraCajTraz") + "-" + rs.getString("Caj_NumCajTraz"));
                                 escaneos = 1;
+                                ok();
                                 scan("ESCANEAR CAJA DESTINO");
                             } else {
                                 escaneos = 0;
                                 txtCajaOrigen.setText("");
                                 txtproducto.setText("");
                                 txtCajaTrazable.setText("");
+                                error();
                                 Toast.makeText(this, "CODIGO CAJA INVALIDO", Toast.LENGTH_SHORT).show();
                                 scan("ESCANEAR CAJA ORIGEN");
                             }
@@ -328,6 +336,7 @@ public class Marcado_Inicio extends AppCompatActivity {
                             txtCajaOrigen.setText("");
                             txtproducto.setText("");
                             txtCajaTrazable.setText("");
+                            error();
                             Toast.makeText(this, "CODIGO CAJA INVALIDO", Toast.LENGTH_SHORT).show();
                             scan("ESCANEAR CAJA ORIGEN");
                             System.out.println(ex.toString());
@@ -336,6 +345,7 @@ public class Marcado_Inicio extends AppCompatActivity {
                 }
             }
         } else {
+            error();
             Toast.makeText(this, "NO SE ESCANEO NINGUN CODIGO", Toast.LENGTH_SHORT).show();
         }
     }
@@ -343,11 +353,22 @@ public class Marcado_Inicio extends AppCompatActivity {
     public void scan(String titulo) {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setPrompt(titulo);
-        scanIntegrator.setBeepEnabled(true);
+        scanIntegrator.setBeepEnabled(false);
         scanIntegrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         scanIntegrator.setOrientationLocked(true);
         scanIntegrator.setBarcodeImageEnabled(true);
         scanIntegrator.initiateScan();
     }
 
+    private void ok() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.ok);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
+
+    private void error() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.error);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
 }

@@ -75,6 +75,7 @@ public class Print extends AppCompatActivity {
 
         //descargar imagen desde URL
         new DownloadImageTask(imageView).execute("https://d30y9cdsu7xlg0.cloudfront.net/png/16618-200.png");
+        //new DownloadImageTask(imageView).execute("//psanchez:fosforos2@192.168.4.154/Public/img.png");
     }
 
     //asignar imagen URL a un imageView

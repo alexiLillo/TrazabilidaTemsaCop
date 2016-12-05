@@ -3,6 +3,7 @@ package cl.fosforos.trazabilidadtemc;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -264,7 +265,9 @@ public class Seleccion_Final extends AppCompatActivity {
                     if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {
                         txtoperador.setText(scanContent);
                         escaneos = 2;
+                        ok();
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO NO CORRESPONDE A OPERADOR", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO OPERADOR");
                     }
@@ -301,6 +304,7 @@ public class Seleccion_Final extends AppCompatActivity {
                                 txtcodproducto.setText(rs.getString("Tmp_Cod_Producto"));
                                 txtcodmaquina.setText(rs.getString("MaqST_Codigo"));
                                 escaneos = 1;
+                                ok();
                                 scan("ESCANEAR CODIGO OPERADOR");
                             } else {
                                 txtlinea.setText("");
@@ -311,6 +315,7 @@ public class Seleccion_Final extends AppCompatActivity {
                                 txtcodproducto.setText("");
                                 txtcodmaquina.setText("");
                                 txtcaja.setText("");
+                                error();
                                 Toast.makeText(this, "CAJA INCORRECTA, INTENTE CON OTRA CAJA", Toast.LENGTH_SHORT).show();
                                 scan("ESCANEAR CODIGO CAJA");
                             }
@@ -319,17 +324,20 @@ public class Seleccion_Final extends AppCompatActivity {
                             //error
                             escaneos = 0;
                             txtcaja.setText("");
+                            error();
                             Toast.makeText(this, "CAJA INCORRECTA, INTENTE CON OTRA CAJA", Toast.LENGTH_SHORT).show();
                             scan("ESCANEAR CODIGO CAJA");
                             System.out.println(ex.toString());
                         }
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO NO CORRESPONDE A CAJA", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO CAJA");
                     }
                 }
             }
         } else {
+            error();
             Toast.makeText(this, "NO SE ESCANEO NINGUN CODIGO", Toast.LENGTH_SHORT).show();
         }
     }
@@ -337,7 +345,7 @@ public class Seleccion_Final extends AppCompatActivity {
     public void scan(String titulo) {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setPrompt(titulo);
-        scanIntegrator.setBeepEnabled(true);
+        scanIntegrator.setBeepEnabled(false);
         scanIntegrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         scanIntegrator.setOrientationLocked(true);
         scanIntegrator.setBarcodeImageEnabled(true);
@@ -386,4 +394,15 @@ public class Seleccion_Final extends AppCompatActivity {
         }
     }
 
+    private void ok() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.ok);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
+
+    private void error() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.error);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
 }

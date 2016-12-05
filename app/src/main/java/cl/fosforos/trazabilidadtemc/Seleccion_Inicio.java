@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
@@ -276,6 +277,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
                             Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery(query);
                             if (rs.next()) {
+                                error();
                                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                                 builder.setMessage("Caja escaneada ya se encuentra en proceso \nMáquina " + rs.getString("MaqST_Descrip") + "\nFecha " + new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Tmp_Fecha")) + " " + new SimpleDateFormat("HH:mm").format(rs.getTime("Tmp_Fecha")))
                                         .setTitle("Atención!")
@@ -304,12 +306,15 @@ public class Seleccion_Inicio extends AppCompatActivity {
                                                 });
                                 AlertDialog alert = builder.create();
                                 alert.show();
+                            }else {
+                                ok();
                             }
                             con.close();
                         } catch (Exception ex) {
                             System.out.println("-------->" + ex.toString());
                         }
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO NO CORRESPONDE A CAJA", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO DE CAJA");
                     }
@@ -319,14 +324,17 @@ public class Seleccion_Inicio extends AppCompatActivity {
                     if (scanContent.startsWith("MS") && txtmaquina.getText().equals("")) {
                         txtmaquina.setText(scanContent);
                         escaneos = 1;
+                        ok();
                         scan("ESCANEAR CODIGO DE CAJA");
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO NO CORRESPONDE A MAQUINA", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO DE MAQUINA");
                     }
                 }
             }
         } else {
+            error();
             Toast.makeText(this, "NO SE ESCANEO NINGUN CODIGO", Toast.LENGTH_SHORT).show();
         }
     }
@@ -334,11 +342,22 @@ public class Seleccion_Inicio extends AppCompatActivity {
     public void scan(String titulo) {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setPrompt(titulo);
-        scanIntegrator.setBeepEnabled(true);
+        scanIntegrator.setBeepEnabled(false);
         scanIntegrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         scanIntegrator.setOrientationLocked(true);
         scanIntegrator.setBarcodeImageEnabled(true);
         scanIntegrator.initiateScan();
     }
 
+    private void ok() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.ok);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
+
+    private void error() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.error);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
 }

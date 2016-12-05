@@ -3,6 +3,7 @@ package cl.fosforos.trazabilidadtemc;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -204,7 +205,9 @@ public class Marcado_Final extends AppCompatActivity {
                     if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {
                         txtoperador.setText(scanContent);
                         escaneos = 2;
+                        ok();
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO DE OPERADOR INVALIDO", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CODIGO OPERADOR");
                     }
@@ -244,6 +247,7 @@ public class Marcado_Final extends AppCompatActivity {
                                 txtcodmaquina.setText(rs.getString("Caj_CodMaq_MAR"));
                                 txthorainicio.setText(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Caj_FecHora_Ini_MAR")) + " " + new SimpleDateFormat("HH:mm").format(rs.getTime("Caj_FecHora_Ini_MAR")));
                                 escaneos = 1;
+                                ok();
                                 scan("ESCANEAR CODIGO OPERADOR");
                             } else {
                                 escaneos = 0;
@@ -256,6 +260,7 @@ public class Marcado_Final extends AppCompatActivity {
                                 txtMaquina.setText("");
                                 txtcodmaquina.setText("");
                                 txthorainicio.setText("");
+                                error();
                                 Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
                                 scan("ESCANEAR CAJA DESTINO");
                             }
@@ -271,17 +276,20 @@ public class Marcado_Final extends AppCompatActivity {
                             txtMaquina.setText("");
                             txtcodmaquina.setText("");
                             txthorainicio.setText("");
+                            error();
                             Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
                             scan("ESCANEAR CAJA DESTINO");
                             System.out.println("------------>" + ex.toString());
                         }
                     } else {
+                        error();
                         Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
                         scan("ESCANEAR CAJA DESTINO");
                     }
                 }
             }
         } else {
+            error();
             Toast.makeText(this, "NO SE ESCANEO NINGUN CODIGO", Toast.LENGTH_SHORT).show();
         }
     }
@@ -289,11 +297,23 @@ public class Marcado_Final extends AppCompatActivity {
     public void scan(String titulo) {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setPrompt(titulo);
-        scanIntegrator.setBeepEnabled(true);
+        scanIntegrator.setBeepEnabled(false);
         scanIntegrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
         scanIntegrator.setOrientationLocked(true);
         scanIntegrator.setBarcodeImageEnabled(true);
         scanIntegrator.initiateScan();
+    }
+
+    private void ok() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.ok);
+        mp.setVolume(50, 50);
+        mp.start();
+    }
+
+    private void error() {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.error);
+        mp.setVolume(50, 50);
+        mp.start();
     }
 
     //Devuele un java.util.Date desde un String en formato dd/MM/yyyy HH:mm
