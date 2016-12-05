@@ -73,11 +73,11 @@ public class Print extends AppCompatActivity {
         layout = (LinearLayout) findViewById(R.id.layoutPrint);
         imageView = (ImageView) findViewById(R.id.im1);
 
-        //asignar imagen URL a un imageView
+        //descargar imagen desde URL
         new DownloadImageTask(imageView).execute("https://d30y9cdsu7xlg0.cloudfront.net/png/16618-200.png");
     }
 
-    //descargar imagen desde URL
+    //asignar imagen URL a un imageView
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 
@@ -103,7 +103,7 @@ public class Print extends AppCompatActivity {
         }
     }
 
-    //imprimir
+    //imprimir (Imagen bitmap, angulo de rotacion)
     public void printTest(View view) {
         Bitmap rotatedBitmap = rotateBitmap(ConvertToBitmap(layout), 90);
         printBitmap(rotatedBitmap);
@@ -137,9 +137,7 @@ public class Print extends AppCompatActivity {
                     connection.open();
                     ZebraPrinter printer = ZebraPrinterFactory.getInstance(connection);
                     getPrinterStatus();
-
                     ZebraPrinterLinkOs linkOsPrinter = ZebraPrinterFactory.createLinkOsPrinter(printer);
-
                     PrinterStatus printerStatus = (linkOsPrinter != null) ? linkOsPrinter.getCurrentStatus() : printer.getCurrentStatus();
 
                     /**
@@ -174,7 +172,6 @@ public class Print extends AppCompatActivity {
                     bitmap.recycle();
                     helper.dismissLoadingDialog();
                     Looper.myLooper().quit();
-
                 }
             }
 
