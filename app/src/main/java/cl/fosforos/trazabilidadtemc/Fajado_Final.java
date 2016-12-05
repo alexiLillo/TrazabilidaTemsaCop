@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -58,7 +59,7 @@ public class Fajado_Final extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fajado__final);
         getSupportActionBar().setTitle("TERMINO FAJADO");
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         helperSQLServer = new ConexionHelperSQLServer();
         txtturno = (TextView) findViewById(R.id.txtTurno);
@@ -324,6 +325,18 @@ public class Fajado_Final extends AppCompatActivity {
         } catch (ParseException ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

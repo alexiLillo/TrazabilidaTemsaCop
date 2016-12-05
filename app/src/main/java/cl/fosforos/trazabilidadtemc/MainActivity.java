@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (position == 3) {
                     if (conectado(view.getContext())) {
-                        //Intent i = new Intent(view.getContext(), Paletizado.class);
-                        //startActivity(i);
+                        Intent i = new Intent(view.getContext(), Paletizado.class);
+                        startActivity(i);
                     } else {
                         Toast.makeText(view.getContext(), "Sin Conexión WiFi", Toast.LENGTH_SHORT).show();
                     }

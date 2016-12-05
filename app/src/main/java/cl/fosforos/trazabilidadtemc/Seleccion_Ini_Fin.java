@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,10 +23,13 @@ public class Seleccion_Ini_Fin extends AppCompatActivity {
         setContentView(R.layout.activity_seleccion__ini__fin);
         if(util.getSwMenu() == 1) {
             getSupportActionBar().setTitle("SELECCIONADORAS");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }else if(util.getSwMenu() == 2) {
             getSupportActionBar().setTitle("MARCADORAS");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }else if(util.getSwMenu() == 3) {
             getSupportActionBar().setTitle("FAJADORAS");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         botInicio = (Button) findViewById(R.id.botInicio);
@@ -85,5 +89,17 @@ public class Seleccion_Ini_Fin extends AppCompatActivity {
             }
         }
         return connected;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

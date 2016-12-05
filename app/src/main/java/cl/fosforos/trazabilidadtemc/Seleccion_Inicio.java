@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,7 +62,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccion__inicio);
         getSupportActionBar().setTitle("INICIO SELECCIONADORAS");
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         helperSQLServer = new ConexionHelperSQLServer();
         txtturno = (TextView) findViewById(R.id.txtTurno);
@@ -359,5 +360,17 @@ public class Seleccion_Inicio extends AppCompatActivity {
         MediaPlayer mp = MediaPlayer.create(this, R.raw.error);
         mp.setVolume(50, 50);
         mp.start();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

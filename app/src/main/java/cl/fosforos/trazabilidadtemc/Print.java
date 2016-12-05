@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -69,6 +70,8 @@ public class Print extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_print);
+        getSupportActionBar().setTitle("IMPRIMIR ETIQUETAS");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         layout = (LinearLayout) findViewById(R.id.layoutPrint);
         imageView = (ImageView) findViewById(R.id.im1);
@@ -204,5 +207,17 @@ public class Print extends AppCompatActivity {
                 Toast.makeText(Print.this, "Imprimiendo etiqueta...", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
