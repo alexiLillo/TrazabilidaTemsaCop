@@ -131,7 +131,7 @@ public class Marcado_Final extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!(txtoperador.getText().toString().substring(0, txtoperador.getText().length() - 1).endsWith("-")) || !(txtCajaDestino.getText().toString()).startsWith("EN")) {
-                    Toast.makeText(v.getContext(), "Falta Información", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "FALTA INFORMACION, COMPLETE TODOS LOS CAMPOS", Toast.LENGTH_SHORT).show();
                 } else {
                     Connection conF = helperSQLServer.CONN();
                     String queryFecha = "SELECT GETDATE() AS FECHA";
@@ -143,7 +143,7 @@ public class Marcado_Final extends AppCompatActivity {
                         }
                         conF.close();
                     } catch (Exception ex) {
-                        Toast.makeText(v.getContext(), "Error con Fecha del Servidor", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "ERROR AL SELECCIONAR FECHA DEL SERVIDOR", Toast.LENGTH_SHORT).show();
                     }
 
                     Connection conOpe = helperSQLServer.CONN_Oper();
@@ -156,10 +156,12 @@ public class Marcado_Final extends AppCompatActivity {
                         if (rs.next()) {
                             operFicha = rs.getInt("Ficha");
                             operNombre = rs.getString("Nombre");
+                        } else {
+                            Toast.makeText(v.getContext(), "ERROR! OPERARIO NO ENCONTRADO", Toast.LENGTH_SHORT).show();
                         }
                         conOpe.close();
                     } catch (Exception ex) {
-                        Toast.makeText(v.getContext(), "Error con Buscar Operario", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "ERROR AL BUSCAR OPERARIO", Toast.LENGTH_SHORT).show();
                         System.out.println("------>" + ex.toString());
                         System.out.println("------>" + queryOperario);
                     }
@@ -180,10 +182,10 @@ public class Marcado_Final extends AppCompatActivity {
                         Statement stmt = con.createStatement();
                         stmt.executeUpdate(query);
                         con.close();
-                        Toast.makeText(v.getContext(), "Grabado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "TERMINO DE MARCADO REGISTRADO", Toast.LENGTH_SHORT).show();
                         finish();
                     } catch (Exception ex) {
-                        Toast.makeText(v.getContext(), "Error al Grabar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "ERROR AL GUARDAR TERMINO MARCADO! INTENTE NUEVAMENTE", Toast.LENGTH_SHORT).show();
                         System.out.println("------>" + ex.toString());
                         System.out.println("------>" + query);
                     }

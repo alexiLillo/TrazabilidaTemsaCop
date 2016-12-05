@@ -109,7 +109,7 @@ public class Marcado_Inicio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (spinerMarca.getSelectedItemPosition() == 0 || spinerMarcaTipo.getSelectedItemPosition() == 0 || !(txtCajaOrigen.getText().toString()).startsWith("EN") || !(txtCajaDestino.getText().toString()).startsWith("EN") || !(txtMaquina.getText().toString()).startsWith("MM")) {
-                    Toast.makeText(v.getContext(), "Falta Información", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "FALTA INFORMACION, COMPLETE TODOS LOS CAMPOS", Toast.LENGTH_SHORT).show();
                 } else {
                     Connection conF = helperSQLServer.CONN();
                     String queryFecha = "SELECT GETDATE() AS FECHA";
@@ -121,7 +121,7 @@ public class Marcado_Inicio extends AppCompatActivity {
                         }
                         conF.close();
                     } catch (Exception ex) {
-                        Toast.makeText(v.getContext(), "Error con Fecha del Servidor", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "ERROR AL SELECCIONAR FECHA DEL SERVIDOR", Toast.LENGTH_SHORT).show();
                     }
 
                     String[] CodTraz = txtCajaTrazable.getText().toString().split("-");
@@ -139,10 +139,10 @@ public class Marcado_Inicio extends AppCompatActivity {
                         Statement stmt = con.createStatement();
                         stmt.executeUpdate(query);
                         con.close();
-                        Toast.makeText(v.getContext(), "Grabado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "INICIO DE MARCADO REGISTRADO", Toast.LENGTH_SHORT).show();
                         finish();
                     } catch (Exception ex) {
-                        Toast.makeText(v.getContext(), "Error al Grabar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "ERROR AL GUARDAR INICIO MARCADO! INTENTE NUEVAMENTE", Toast.LENGTH_SHORT).show();
                         System.out.println("------>" + ex.toString());
                         System.out.println("------>" + query);
                     }

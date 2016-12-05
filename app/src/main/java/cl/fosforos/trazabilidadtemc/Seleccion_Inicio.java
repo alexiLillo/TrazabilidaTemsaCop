@@ -111,7 +111,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (spinerLinea.getSelectedItemPosition() == 0 || spinerProducto.getSelectedItemPosition() == 0 || !(txtcaja.getText().toString()).startsWith("EN") || !(txtmaquina.getText().toString()).startsWith("MS")) {
-                    Toast.makeText(v.getContext(), "Falta Información", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "FALTA INFORMACION, COMPLETE TODOS LOS CAMPOS", Toast.LENGTH_SHORT).show();
                 } else {
                     Connection conF = helperSQLServer.CONN();
                     String queryFecha = "SELECT GETDATE() AS FECHA";
@@ -124,7 +124,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
                         }
                         conF.close();
                     } catch (Exception ex) {
-                        Toast.makeText(v.getContext(), "Error con Fecha", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "ERROR AL SELECCIONAR FECHA DEL SERVIDOR", Toast.LENGTH_SHORT).show();
                     }
 
                     Connection con = helperSQLServer.CONN();
@@ -137,7 +137,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
                         Statement stmt = con.createStatement();
                         stmt.executeUpdate(query);
                         con.close();
-                        Toast.makeText(v.getContext(), "Grabado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "INICIO DE SELECCIONADO REGISTRADO", Toast.LENGTH_SHORT).show();
                         //Seleccion_Inicio.super.onBackPressed();
                         finish();
                         //txtcaja.setText("");
@@ -145,7 +145,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
                         //spinerLinea.setSelection(0);
                         //spinerProducto.setSelection(0);
                     } catch (Exception ex) {
-                        Toast.makeText(v.getContext(), "Error al Grabar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "ERROR AL GUARDAR INICIO SELECCIONADO! INTENTE NUEVAMENTE", Toast.LENGTH_SHORT).show();
                         //System.out.println(ex.toString());
                         //error
                     }

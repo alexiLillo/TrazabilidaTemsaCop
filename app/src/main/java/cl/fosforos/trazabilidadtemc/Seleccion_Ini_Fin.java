@@ -6,9 +6,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Seleccion_Ini_Fin extends AppCompatActivity {
@@ -21,13 +24,13 @@ public class Seleccion_Ini_Fin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seleccion__ini__fin);
-        if(util.getSwMenu() == 1) {
+        if (util.getSwMenu() == 1) {
             getSupportActionBar().setTitle("SELECCIONADORAS");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }else if(util.getSwMenu() == 2) {
+        } else if (util.getSwMenu() == 2) {
             getSupportActionBar().setTitle("MARCADORAS");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }else if(util.getSwMenu() == 3) {
+        } else if (util.getSwMenu() == 3) {
             getSupportActionBar().setTitle("FAJADORAS");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -38,19 +41,24 @@ public class Seleccion_Ini_Fin extends AppCompatActivity {
         botInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(conectado(v.getContext()) && util.getSwMenu() == 1) {
+                if (conectado(v.getContext()) && util.getSwMenu() == 1) {
                     Intent i = new Intent(v.getContext(), Seleccion_Inicio.class);
                     startActivity(i);
-                }
-                else if(conectado(v.getContext()) && util.getSwMenu() == 2) {
+                } else if (conectado(v.getContext()) && util.getSwMenu() == 2) {
                     Intent i = new Intent(v.getContext(), Marcado_Inicio.class);
                     startActivity(i);
-                }
-                else if(conectado(v.getContext()) && util.getSwMenu() == 3) {
-                        Intent i = new Intent(v.getContext(), Fajado_Inicio.class);
-                        startActivity(i);
-                }else{
-                    Toast.makeText(v.getContext(),"Sin Conexión WiFi",Toast.LENGTH_SHORT).show();
+                } else if (conectado(v.getContext()) && util.getSwMenu() == 3) {
+                    Intent i = new Intent(v.getContext(), Fajado_Inicio.class);
+                    startActivity(i);
+                } else {
+                    Toast toast = Toast.makeText(Seleccion_Ini_Fin.this, "NO HAY CONEXION WIFI\nASEGURESE DE ESTAR CONECTADO A LA RED", Toast.LENGTH_LONG);
+                    //centrar texto de toast
+                    LinearLayout layout = (LinearLayout) toast.getView();
+                    if (layout.getChildCount() > 0) {
+                        TextView tv = (TextView) layout.getChildAt(0);
+                        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                    }
+                    toast.show();
                 }
             }
         });
@@ -58,19 +66,24 @@ public class Seleccion_Ini_Fin extends AppCompatActivity {
         botFin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(conectado(v.getContext())&& util.getSwMenu() == 1) {
+                if (conectado(v.getContext()) && util.getSwMenu() == 1) {
                     Intent i = new Intent(v.getContext(), Seleccion_Final.class);
                     startActivity(i);
-                }
-                else if(conectado(v.getContext()) && util.getSwMenu() == 2) {
+                } else if (conectado(v.getContext()) && util.getSwMenu() == 2) {
                     Intent i = new Intent(v.getContext(), Marcado_Final.class);
                     startActivity(i);
-                }
-                else if(conectado(v.getContext()) && util.getSwMenu() == 3) {
+                } else if (conectado(v.getContext()) && util.getSwMenu() == 3) {
                     Intent i = new Intent(v.getContext(), Fajado_Final.class);
                     startActivity(i);
-                }else{
-                    Toast.makeText(v.getContext(),"Sin Conexión WiFi",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast toast = Toast.makeText(Seleccion_Ini_Fin.this, "NO HAY CONEXION WIFI\nASEGURESE DE ESTAR CONECTADO A LA RED", Toast.LENGTH_LONG);
+                    //centrar texto de toast
+                    LinearLayout layout = (LinearLayout) toast.getView();
+                    if (layout.getChildCount() > 0) {
+                        TextView tv = (TextView) layout.getChildAt(0);
+                        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                    }
+                    toast.show();
                 }
             }
         });

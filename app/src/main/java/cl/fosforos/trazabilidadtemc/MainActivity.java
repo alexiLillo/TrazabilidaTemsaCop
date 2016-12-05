@@ -15,12 +15,15 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.SQLOutput;
@@ -53,91 +56,53 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                //Toast.makeText(view.getContext(),"pos:"+position,Toast.LENGTH_SHORT).show();
+                if (conectado(view.getContext())) {
 
-                //Fragment ff= new Fragment();
+                    if (position == 0) {
+                        util.setSwMenu(1);
+                        Intent i = new Intent(view.getContext(), Seleccion_Ini_Fin.class);
+                        startActivity(i);
+                    }
 
-                if (position == 0) {
-                    //AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                    //builder.setMessage("Seleccione Proceso")
-                    //        .setTitle("")
-                    //        .setCancelable(false)
-                    //        .setNegativeButton("Inicio",
-                    //                new DialogInterface.OnClickListener() {
-                    //                    public void onClick(DialogInterface dialog, int id) {
-                    //                    }
-                    //                })
-                    //        .setPositiveButton("Termino",
-                    //                new DialogInterface.OnClickListener() {
-                    //                    public void onClick(DialogInterface dialog, int id) {
-                    //                        if(conectado(view.getContext())) {
-                    //                            Intent i = new Intent(view.getContext(), Seleccion_Final.class);
-                    //                            startActivity(i);
-                    //                        }else{
-                    //                            Toast.makeText(view.getContext(),"Sin Conexión WiFi",Toast.LENGTH_SHORT).show();
-                    //                        }
-                    //                   }
-                    //                });
-                    //AlertDialog alert = builder.create();
-                    //alert.show();
-                    util.setSwMenu(1);
-                    if (conectado(view.getContext())) {
+                    if (position == 1) {
+                        util.setSwMenu(2);
                         Intent i = new Intent(view.getContext(), Seleccion_Ini_Fin.class);
                         startActivity(i);
-                    } else {
-                        Toast.makeText(view.getContext(), "Sin Conexión WiFi", Toast.LENGTH_SHORT).show();
                     }
-                }
-                if (position == 1) {
-                    util.setSwMenu(2);
-                    if (conectado(view.getContext())) {
+
+                    if (position == 2) {
+                        util.setSwMenu(3);
                         Intent i = new Intent(view.getContext(), Seleccion_Ini_Fin.class);
                         startActivity(i);
-                    } else {
-                        Toast.makeText(view.getContext(), "Sin Conexión WiFi", Toast.LENGTH_SHORT).show();
                     }
-                }
-                if (position == 2) {
-                    util.setSwMenu(3);
-                    if (conectado(view.getContext())) {
-                        Intent i = new Intent(view.getContext(), Seleccion_Ini_Fin.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(view.getContext(), "Sin Conexión WiFi", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                if (position == 3) {
-                    if (conectado(view.getContext())) {
+
+                    if (position == 3) {
                         Intent i = new Intent(view.getContext(), Paletizado.class);
                         startActivity(i);
-                    } else {
-                        Toast.makeText(view.getContext(), "Sin Conexión WiFi", Toast.LENGTH_SHORT).show();
                     }
-                }
 
-                if (position == 4) {
-                    if (conectado(view.getContext())) {
+                    if (position == 4) {
                         Intent i = new Intent(view.getContext(), Print.class);
                         startActivity(i);
-                    } else {
-                        Toast.makeText(view.getContext(), "Sin Conexión WiFi", Toast.LENGTH_SHORT).show();
                     }
+
+                    //cierra el menu al pulsar una opcion
+                    drawerLayout.closeDrawer(listView);
+                    // otra alternativa es drawerLayout.closeDrawer();
+
+                    //cambiar el titulo del action bar
+                    //getSupportActionBar().setTitle(opciones[position]);
+
+                } else {
+                    Toast toast = Toast.makeText(MainActivity.this, "NO HAY CONEXION WIFI\nASEGURESE DE ESTAR CONECTADO A LA RED", Toast.LENGTH_LONG);
+                    //centrar texto de toast
+                    LinearLayout layout = (LinearLayout) toast.getView();
+                    if (layout.getChildCount() > 0) {
+                        TextView tv = (TextView) layout.getChildAt(0);
+                        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                    }
+                    toast.show();
                 }
-
-                //FragmentManager FM = getSupportFragmentManager();
-                //FragmentTransaction FT = FM.beginTransaction();
-                //FT.replace(R.id.contenedorFragmento,ff);
-                //FT.commit();
-
-                //getSupportFragmentManager().beginTransaction().replace(R.id.contenedorFragmento,ff).commit();
-
-
-                //cierra el menu al pulsar una opcion
-                drawerLayout.closeDrawer(listView);
-                // otra alternativa es drawerLayout.closeDrawer();
-
-                //cambiar el titulo del action bar
-                //getSupportActionBar().setTitle(opciones[position]);
 
             }
         });
@@ -147,14 +112,11 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, android.R.drawable.ic_media_play, R.string.abrir, R.string.cerrar);
         drawerLayout.setDrawerListener(drawerToggle);
 
-
         //una flecha volver
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //para cambiar icono
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_action_reorder);
-
-
     }
 
     @Override
