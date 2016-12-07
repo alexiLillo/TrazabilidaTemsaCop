@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
     String[] opciones;
     ActionBarDrawerToggle drawerToggle;
     Utilies util = Utilies.getInstance();
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        imageView = (ImageView) findViewById(R.id.imageTemsa);
         opciones = new String[]{"SELECCIONADORAS", "MARCADORAS", "FAJADORAS", "PALETIZADO", "IMPRIMIR ETIQUETAS"};
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedorPrincipal);
         frameLayout = (FrameLayout) findViewById(R.id.contenedorFragmento);

@@ -151,7 +151,7 @@ public class Print extends AppCompatActivity {
                     if (printerStatus.isReadyToPrint) {
                         try {
                             //helper.showLoadingDialog("Printer Ready \nProcessing to Print.");
-                            helper.showLoadingDialog("Enviando información a Impresora...");
+                            helper.showLoadingDialog("Impresora lista\nEnviando información de etiquetas...");
                             //printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 550, 412, false);
                             //for (int i = 0; i <= 9; i++) {
                             printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 800, 800, false);

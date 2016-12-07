@@ -156,7 +156,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -181,15 +181,15 @@
 
         <Button
             android:text="Buscar"
-            android:layout_width="70sp"
-            android:layout_height="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
             android:id="@+id/botBuscaCorre"
             android:textSize="10sp"
             />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -214,8 +214,8 @@
 
         <Button
             android:text="Agregar"
-            android:layout_width="70sp"
-            android:layout_height="30sp"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
             android:id="@+id/botAgregaCaj"
             android:textSize="10sp"
             />
@@ -229,7 +229,7 @@
         android:layout_marginRight="90sp">
 
         <Button
-            android:layout_marginTop="15sp"
+            android:layout_marginTop="16dp"
             android:text="Capturar Código QR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
