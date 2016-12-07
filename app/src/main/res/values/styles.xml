@@ -8,12 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ErrorButtonAppearance" >
+    <style name="ErrorButtonAppearance" parent= "Theme.AppCompat.Light.Dialog">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16dp</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorError</item>
     </style>
-    <style name="ButtonAppearance" >
+    <style name="ButtonAppearance" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/colorPrimary</item>

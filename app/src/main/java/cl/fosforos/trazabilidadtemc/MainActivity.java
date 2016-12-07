@@ -103,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     toast.show();
                 }
-
             }
         });
-
 
         //CONFIGURAR EL DRAWER TOGGLE
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, android.R.drawable.ic_media_play, R.string.abrir, R.string.cerrar);

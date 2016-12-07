@@ -150,26 +150,33 @@ public class Print extends AppCompatActivity {
 
                     if (printerStatus.isReadyToPrint) {
                         try {
-                            helper.showLoadingDialog("Printer Ready \nProcessing to Print.");
+                            //helper.showLoadingDialog("Printer Ready \nProcessing to Print.");
+                            helper.showLoadingDialog("Impresora lista \nProcesando información...");
                             //printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 550, 412, false);
                             printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 800, 800, false);
                         } catch (ConnectionException e) {
-                            helper.showErrorDialogOnGuiThread(e.getMessage());
+                            //helper.showErrorDialogOnGuiThread(e.getMessage());
+                            helper.showErrorDialogOnGuiThread("Imposible conectar con impresora\nPor favor, verifique la conexión de Red");
                         }
                     } else if (printerStatus.isHeadOpen) {
-                        helper.showErrorMessage("Error: Head Open \nPlease Close Printer Head to Print.");
+                        //helper.showErrorMessage("Error: Head Open \nPlease Close Printer Head to Print.");
+                        helper.showErrorMessage("Error: Cabezal abierto \nPor favor, cierre el cabezal de la impresora.");
                     } else if (printerStatus.isPaused) {
-                        helper.showErrorMessage("Error: Printer Paused.");
+                        //helper.showErrorMessage("Error: Printer Paused.");
+                        helper.showErrorMessage("Error: Impresora pausada...");
                     } else if (printerStatus.isPaperOut) {
-                        helper.showErrorMessage("Error: Media Out \nPlease Load Media to Print.");
+                        //helper.showErrorMessage("Error: Media Out \nPlease Load Media to Print.");
+                        helper.showErrorMessage("Error: Sin medios \nPor favor, cargue medios para imprimir.");
                     } else {
-                        helper.showErrorMessage("Error: Please check the Connection of the Printer.");
+                        //helper.showErrorMessage("Error: Please check the Connection of the Printer.");
+                        helper.showErrorMessage("Error: Por favor, verifique su conexión de Red.");
                     }
 
                     connection.close();
 
                 } catch (ConnectionException e) {
-                    helper.showErrorDialogOnGuiThread(e.getMessage());
+                    //helper.showErrorDialogOnGuiThread(e.getMessage());
+                    helper.showErrorDialogOnGuiThread("Imposible conectar con impresora\nPor favor, verifique la conexión de Red\n\nDetalles del error:\n" + e.getMessage() + "");
                 } catch (ZebraPrinterLanguageUnknownException e) {
                     helper.showErrorDialogOnGuiThread(e.getMessage());
                 } finally {
