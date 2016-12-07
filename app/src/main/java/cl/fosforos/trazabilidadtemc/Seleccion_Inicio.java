@@ -260,8 +260,8 @@ public class Seleccion_Inicio extends AppCompatActivity {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanningResult != null) {
             if (scanningResult.getContents() != null) {
-                scanContent = scanningResult.getContents().toString();
-                scanFormat = scanningResult.getFormatName().toString();
+                scanContent = scanningResult.getContents();
+                scanFormat = scanningResult.getFormatName();
 
                 if (escaneos == 1) {
                     if (scanContent.startsWith("EN") && !txtmaquina.getText().equals("")) {
@@ -273,7 +273,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
                                 "INNER JOIN TIPOS_LINEAS ON TMP_SELECCIONADORA.Tmp_Cod_Linea=TIPOS_LINEAS.Lin_Codigo " +
                                 "INNER JOIN PRODUCTO_BASE ON TMP_SELECCIONADORA.Tmp_Cod_Producto=PRODUCTO_BASE.PB_Codigo " +
                                 "INNER JOIN MAQ_STI_STO ON TMP_SELECCIONADORA.Tmp_COD_Maquina=MAQ_STI_STO.MaqST_QRCode " +
-                                "Where Tmp_Cod_Caja='" + scanContent.toString() + "'";
+                                "Where Tmp_Cod_Caja='" + scanContent + "'";
                         try {
                             Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery(query);
@@ -287,7 +287,7 @@ public class Seleccion_Inicio extends AppCompatActivity {
                                                 new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
                                                         Connection conD = helperSQLServer.CONN();
-                                                        String queryD = "Delete TMP_SELECCIONADORA Where Tmp_Cod_Caja='" + scanContent.toString() + "'";
+                                                        String queryD = "Delete TMP_SELECCIONADORA Where Tmp_Cod_Caja='" + scanContent + "'";
                                                         try {
                                                             Statement stmtD = conD.createStatement();
                                                             stmtD.executeUpdate(queryD);

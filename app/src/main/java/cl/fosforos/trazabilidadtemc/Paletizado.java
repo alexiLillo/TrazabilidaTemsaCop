@@ -112,8 +112,8 @@ public class Paletizado extends AppCompatActivity {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanningResult != null) {
             if (scanningResult.getContents() != null) {
-                scanContent = scanningResult.getContents().toString();
-                scanFormat = scanningResult.getFormatName().toString();
+                scanContent = scanningResult.getContents();
+                scanFormat = scanningResult.getFormatName();
 
                 //escanear cajas en pallets e imprimir etiquetas
             }

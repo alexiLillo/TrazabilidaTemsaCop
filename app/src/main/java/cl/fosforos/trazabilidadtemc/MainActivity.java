@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         // Recupera todas las redes (tanto móviles como wifi)
         NetworkInfo[] redes = connec.getAllNetworkInfo();
-        for (int i = 0; i < redes.length; i++) {
+        for (NetworkInfo rede : redes) {
             // Si alguna red tiene conexión, se devuelve true
             //System.out.println(redes[i].getTypeName());
             //System.out.println(redes[i].getSubtypeName());
             //System.out.println(redes[i].getExtraInfo());
-            if (redes[i].getTypeName().equals("WIFI") && redes[i].getState() == NetworkInfo.State.CONNECTED) {
+            if (rede.getTypeName().equals("WIFI") && rede.getState() == NetworkInfo.State.CONNECTED) {
                 connected = true;
             }
         }

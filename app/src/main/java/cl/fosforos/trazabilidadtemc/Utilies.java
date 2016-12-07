@@ -19,10 +19,10 @@ public class Utilies {
         this.swMenu = swMenu;
     }
 
-    public static synchronized Utilies getInstance(){
-     if (instance==null){
-         instance=new Utilies();
-     }
+    public static synchronized Utilies getInstance() {
+        if (instance == null) {
+            instance = new Utilies();
+        }
         return instance;
     }
 }

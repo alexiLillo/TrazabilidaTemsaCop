@@ -201,8 +201,8 @@ public class Marcado_Final extends AppCompatActivity {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanningResult != null) {
             if (scanningResult.getContents() != null) {
-                scanContent = scanningResult.getContents().toString();
-                scanFormat = scanningResult.getFormatName().toString();
+                scanContent = scanningResult.getContents();
+                scanFormat = scanningResult.getFormatName();
 
                 if (escaneos == 1) {
                     if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {

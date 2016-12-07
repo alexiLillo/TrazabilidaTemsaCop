@@ -37,11 +37,11 @@ public class UIHelper {
         if (activity != null) {
             activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    loadingDialog = new ProgressDialog(activity,R.style.ButtonAppearance);
+                    loadingDialog = new ProgressDialog(activity, R.style.ButtonAppearance);
                     loadingDialog.setMessage(message);
                     loadingDialog.show();
                     TextView tv1 = (TextView) loadingDialog.findViewById(android.R.id.message);
-                    tv1.setTextAppearance(activity,R.style.ButtonAppearance);
+                    tv1.setTextAppearance(activity, R.style.ButtonAppearance);
 
                 }
             });
@@ -53,7 +53,7 @@ public class UIHelper {
         if (activity != null) {
             activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    AlertDialog.Builder builder=new  AlertDialog.Builder(activity,R.style.ErrorButtonAppearance);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.ErrorButtonAppearance);
                     builder.setMessage(message).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
@@ -61,7 +61,7 @@ public class UIHelper {
                         }
 
                     }).create();
-                    Dialog d= builder.show();
+                    Dialog d = builder.show();
                     TextView tv1 = (TextView) d.findViewById(android.R.id.message);
                     tv1.setTextAppearance(activity, R.style.ErrorButtonAppearance);
                 }

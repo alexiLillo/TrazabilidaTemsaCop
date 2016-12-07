@@ -173,8 +173,8 @@ public class Fajado_Inicio extends AppCompatActivity {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanningResult != null) {
             if (scanningResult.getContents() != null) {
-                scanContent = scanningResult.getContents().toString();
-                scanFormat = scanningResult.getFormatName().toString();
+                scanContent = scanningResult.getContents();
+                scanFormat = scanningResult.getFormatName();
 
                 if (escaneos == 2) {
                     if (scanContent.startsWith("MF") && !txtCajaOrigen.getText().toString().equals("") && !txtCajaDestino.getText().toString().equals("") && !scanContent.equals(txtCajaOrigen.getText()) && !scanContent.equals(txtCajaDestino.getText())) {

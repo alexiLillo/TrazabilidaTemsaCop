@@ -58,13 +58,9 @@ import android.os.Bundle;
 public class Print extends AppCompatActivity {
 
     private LinearLayout layout;
-    private ImageView imageView;
 
     private Connection connection;
     private UIHelper helper = new UIHelper(this);
-
-    private String ip = "192.168.4.129";
-    private String port = "6101";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +70,7 @@ public class Print extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         layout = (LinearLayout) findViewById(R.id.layoutPrint);
-        imageView = (ImageView) findViewById(R.id.im1);
+        ImageView imageView = (ImageView) findViewById(R.id.im1);
 
         //descargar imagen desde URL
         new DownloadImageTask(imageView).execute("https://d30y9cdsu7xlg0.cloudfront.net/png/16618-200.png");
@@ -194,14 +190,10 @@ public class Print extends AppCompatActivity {
 
     //devolver conexion pot TCP/IP
     private Connection getZebraPrinterConn() {
-        int portNumber;
-        try {
-            portNumber = Integer.parseInt(port);
-        } catch (NumberFormatException e) {
-            portNumber = 0;
-        }
-        //return isBluetoothSelected() ? new BluetoothConnection(getMacAddressFieldText()) : new TcpConnection(getTcpAddress(), portNumber);
+        int portNumber = 6101;
+        String ip = "192.168.4.129";
         return new TcpConnection(ip, portNumber);
+        //return isBluetoothSelected() ? new BluetoothConnection(getMacAddressFieldText()) : new TcpConnection(getTcpAddress(), portNumber);
     }
 
     //devolver estado de la impresora
