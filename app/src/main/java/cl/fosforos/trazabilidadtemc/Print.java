@@ -151,9 +151,11 @@ public class Print extends AppCompatActivity {
                     if (printerStatus.isReadyToPrint) {
                         try {
                             //helper.showLoadingDialog("Printer Ready \nProcessing to Print.");
-                            helper.showLoadingDialog("Impresora lista \nProcesando información...");
+                            helper.showLoadingDialog("Enviando información a Impresora...");
                             //printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 550, 412, false);
+                            //for (int i = 0; i <= 9; i++) {
                             printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 800, 800, false);
+                            //}
                         } catch (ConnectionException e) {
                             //helper.showErrorDialogOnGuiThread(e.getMessage());
                             helper.showErrorDialogOnGuiThread("Imposible conectar con impresora\nPor favor, verifique la conexión de Red");
@@ -211,7 +213,7 @@ public class Print extends AppCompatActivity {
             @Override
             public void run() {
                 //Toast.makeText(Print.this, displayPrinterLanguage + "\n" + "Language set to ZPL", Toast.LENGTH_LONG).show();
-                Toast.makeText(Print.this, "Imprimiendo etiqueta...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Print.this, "Imprimiendo etiqueta...", Toast.LENGTH_SHORT).show();
             }
         });
     }
