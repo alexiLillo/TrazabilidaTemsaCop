@@ -1,44 +1,31 @@
 package cl.fosforos.trazabilidadtemc;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
-import android.net.Uri;
+import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.zebra.sdk.comm.BluetoothConnection;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.onbarcode.barcode.android.AndroidColor;
+import com.onbarcode.barcode.android.DataMatrix;
+import com.onbarcode.barcode.android.IBarcode;
 import com.zebra.sdk.comm.Connection;
 import com.zebra.sdk.comm.ConnectionException;
 import com.zebra.sdk.comm.TcpConnection;
-import com.zebra.sdk.device.ZebraIllegalArgumentException;
 import com.zebra.sdk.graphics.internal.ZebraImageAndroid;
 import com.zebra.sdk.printer.PrinterStatus;
 import com.zebra.sdk.printer.SGD;
@@ -47,17 +34,12 @@ import com.zebra.sdk.printer.ZebraPrinterFactory;
 import com.zebra.sdk.printer.ZebraPrinterLanguageUnknownException;
 import com.zebra.sdk.printer.ZebraPrinterLinkOs;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 public class Print extends AppCompatActivity {
 
     private LinearLayout layout;
+    private static ImageView imageViewDataMatrix;
 
     private Connection connection;
     private UIHelper helper = new UIHelper(this);
@@ -71,10 +53,13 @@ public class Print extends AppCompatActivity {
 
         layout = (LinearLayout) findViewById(R.id.layoutPrint);
         ImageView imageView = (ImageView) findViewById(R.id.im1);
+        imageViewDataMatrix = (ImageView) findViewById(R.id.datamatrix);
 
         //descargar imagen desde URL
-        new DownloadImageTask(imageView).execute("https://d30y9cdsu7xlg0.cloudfront.net/png/16618-200.png");
-        //new DownloadImageTask(imageView).execute("//psanchez:fosforos2@192.168.4.154/Public/img.png");
+        //new DownloadImageTask(imageView).execute("https://d30y9cdsu7xlg0.cloudfront.net/png/16618-200.png");
+
+        //generateDatamatrix("datamatrix test 01");
+        writeQRCode("datamatrix test 01");
     }
 
     //asignar imagen URL a un imageView
@@ -150,7 +135,7 @@ public class Print extends AppCompatActivity {
                             helper.showLoadingDialog("Impresora lista\nEnviando información de etiquetas...");
                             //printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 550, 412, false);
                             //for (int i = 0; i <= 9; i++) {
-                            printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 800, 800, false);
+                            printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 800, 1200, false);
                             //}
                         } catch (ConnectionException e) {
                             //helper.showErrorDialogOnGuiThread(e.getMessage());
@@ -219,6 +204,92 @@ public class Print extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //OnBarcode generador de codigos (crea marca de agua)
+    public void generateDatamatrix(String dataValue){
+        DataMatrix barcode = new DataMatrix();
+
+	/*
+	   Data Matrix Valid data char set:
+	        ASCII values 0 - 127 in accordance with the US national version of ISO/IEC 646
+	            ASCII values 128 - 255 in accordance with ISO 8859-1. These are referred to as extended ASCII.
+
+	*/
+        barcode.setData(dataValue);
+
+        barcode.setDataMode(DataMatrix.M_AUTO);
+
+        // if your selected format mode doesnot have enough space to encode your data,
+        // the library will choose the right format mode for you automatically.
+        barcode.setFormatMode(DataMatrix.F_10X10);
+
+        //  Set the processTilde property to true, if you want use the tilde character "~" to
+        //  specify special characters in the input data. Default is false.
+        //  1-byte character: ~ddd (character value from 0 ~ 255)
+        //  ASCII (with EXT): from ~000 to ~255
+        //  2-byte character: ~6ddddd (character value from 0 ~ 65535)
+        //  Unicode: from ~600000 to ~665535
+        //  ECI: from ~7000000 to ~7999999
+        barcode.setProcessTilde(true);
+
+        // if you want to encode GS1 compatible Data Matrix, you need set FNC1 mode to IBarcode.FNC1_ENABLE
+        barcode.setFnc1Mode(IBarcode.FNC1_NONE);
+
+        // Unit of Measure, pixel, cm, or inch
+        barcode.setUom(IBarcode.UOM_PIXEL);
+        // barcode bar module width (X) in pixel
+        barcode.setX(3f);
+
+        barcode.setLeftMargin(10f); //10f originalmente
+        barcode.setRightMargin(10f);
+        barcode.setTopMargin(10f);
+        barcode.setBottomMargin(10f);
+        // barcode image resolution in dpi
+        barcode.setResolution(72); //72 originalmente
+
+        // barcode bar color and background color in Android device
+        barcode.setForeColor(AndroidColor.black);
+        barcode.setBackColor(AndroidColor.white);
+
+	/*
+	specify your barcode drawing area
+	    */
+        RectF bounds = new RectF(30, 30, 0, 0);
+
+        //bitmap para asignarle canvas
+        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        try {
+            barcode.drawBarcode(canvas,bounds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //asignar el bitmap a un imageView
+        imageViewDataMatrix.setImageBitmap(bitmap);
+    }
+
+    //ZXING generador de codigos
+    public static void writeQRCode(String codeValue) {
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            //int width = imageViewDataMatrix.getWidth();
+            //int height = imageViewDataMatrix.getHeight();
+            int width = 200;
+            int height = 200;
+            BitMatrix bitMatrix = writer.encode(codeValue, BarcodeFormat.QR_CODE, width, height);
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    bitmap.setPixel(i, j, bitMatrix.get(i, j) ? Color.BLACK: Color.WHITE);
+                }
+            }
+            imageViewDataMatrix.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
         }
     }
 }

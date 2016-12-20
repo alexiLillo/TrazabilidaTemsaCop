@@ -15,24 +15,23 @@
         android:text="Imprimir etiqueta" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/layoutPrint"
-                android:layout_width="800px"
-                android:layout_height="800px"
+                android:layout_width="100mm"
+                android:layout_height="66.66mm"
                 android:background="#fff"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="150px"
-                    android:layout_height="800px"
+                    android:layout_width="20mm"
+                    android:layout_height="66.66mm"
                     android:background="#fff"
                     android:gravity="right"
                     android:orientation="vertical">
@@ -47,89 +46,141 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="600px"
-                    android:layout_height="800px"
+                    android:layout_width="80mm"
+                    android:layout_height="66.66mm"
                     android:background="#fff"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="600px"
-                        android:layout_height="265px"
+                        android:layout_width="match_parent"
+                        android:layout_height="22mm"
                         android:background="#fff"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        >
 
                         <TextView
+                            android:id="@+id/txtNombreProducto"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Etiqueta de prueba"
+                            android:text="CORBATA 93 mm"
+                            android:textStyle="bold"
                             android:textColor="#000"
-                            android:textSize="15sp" />
+                            android:textSize="35sp"
+                            />
 
                         <TextView
+                            android:id="@+id/txtCantidad"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="GRANEL SIN MARCA"
+                            android:text="CONTENIDO: 5000 UN"
+                            android:textStyle="bold"
                             android:textColor="#000"
                             android:textSize="20sp" />
+                        <TextView
+                            android:id="@+id/txtMarcaProducto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NESTLÉ CHILE"
+                            android:textStyle="bold"
+                            android:textColor="#000"
+                            android:textSize="40sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2px"
+                        android:layout_height="3px"
                         android:background="#000"
                         android:orientation="horizontal" />
 
                     <LinearLayout
-                        android:layout_width="600px"
-                        android:layout_height="265px"
+                        android:layout_width="match_parent"
+                        android:layout_height="22mm"
                         android:background="#fff"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="16dp">
+
+                        android:weightSum="1">
 
                         <ImageView
+                            android:padding="5dp"
                             android:id="@+id/im1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_width="504dp"
+                            android:layout_height="43dp"
+                            android:src="@drawable/temsalado"
+                            android:layout_weight="0.34" />
 
                         <TextView
+                            android:padding="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="025858-684165"
+                            android:text="CAJA: 025858-684165"
                             android:textColor="#000"
-                            android:textSize="15sp" />
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:id="@+id/textView" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="2px"
+                        android:layout_height="3px"
                         android:background="#000"
                         android:orientation="horizontal" />
 
                     <LinearLayout
-                        android:layout_width="600px"
-                        android:layout_height="265px"
-                        android:background="#fff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        android:orientation="horizontal">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="LOTE: P010201300-123121312/23423"
-                            android:textColor="#000"
-                            android:textSize="15sp" />
+                            android:layout_height="22mm"
+                            android:background="#fff"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            >
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MANTENGASE EN UN LUGAR PRESCO Y SECO"
-                            android:textColor="#000"
-                            android:textSize="10sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="LOTE: P010201300-123121312/23423"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="22sp"
+                                android:layout_marginBottom="16dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="MANTENGASE EN UN LUGAR PRESCO Y SECO"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="DURACIÓN: 24 MESES"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PALITO DE USO EXCLUSIVO PARA LA INDUSTRIA DEL HELADO"
+                                android:textStyle="bold"
+                                android:textColor="#000"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/datamatrix"
+                            android:layout_width="200px"
+                            android:layout_height="200px"
+                            android:layout_gravity="center" />
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
