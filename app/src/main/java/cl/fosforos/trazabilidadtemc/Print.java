@@ -278,8 +278,8 @@ public class Print extends AppCompatActivity {
         try {
             //int width = imageViewDataMatrix.getWidth();
             //int height = imageViewDataMatrix.getHeight();
-            int width = 200;
-            int height = 200;
+            int width = 180;
+            int height = 180;
             BitMatrix bitMatrix = writer.encode(codeValue, BarcodeFormat.QR_CODE, width, height);
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             for (int i = 0; i < width; i++) {
