@@ -15,10 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.datamatrix.DataMatrixWriter;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.onbarcode.barcode.android.AndroidColor;
 import com.onbarcode.barcode.android.DataMatrix;
@@ -40,6 +42,7 @@ public class Print extends AppCompatActivity {
 
     private LinearLayout layout;
     private static ImageView imageViewDataMatrix;
+    private TextView txtLote;
 
     private Connection connection;
     private UIHelper helper = new UIHelper(this);
@@ -52,14 +55,15 @@ public class Print extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         layout = (LinearLayout) findViewById(R.id.layoutPrint);
-        ImageView imageView = (ImageView) findViewById(R.id.im1);
+        ImageView imagePalito = (ImageView) findViewById(R.id.im1);
         imageViewDataMatrix = (ImageView) findViewById(R.id.datamatrix);
+        txtLote = (TextView) findViewById(R.id.txtLote);
 
         //descargar imagen desde URL
-        //new DownloadImageTask(imageView).execute("https://d30y9cdsu7xlg0.cloudfront.net/png/16618-200.png");
+        new DownloadImageTask(imagePalito).execute("http://images.imcap.cl/cbt114mm/savory.png");
 
         //generateDatamatrix("datamatrix test 01");
-        writeQRCode("datamatrix test 01");
+        writeQRcode((String) txtLote.getText());
     }
 
     //asignar imagen URL a un imageView
@@ -273,8 +277,9 @@ public class Print extends AppCompatActivity {
     }
 
     //ZXING generador de codigos
-    public static void writeQRCode(String codeValue) {
+    public static void writeQRcode(String codeValue) {
         QRCodeWriter writer = new QRCodeWriter();
+        DataMatrixWriter writerMatrix = new DataMatrixWriter();
         try {
             //int width = imageViewDataMatrix.getWidth();
             //int height = imageViewDataMatrix.getHeight();
