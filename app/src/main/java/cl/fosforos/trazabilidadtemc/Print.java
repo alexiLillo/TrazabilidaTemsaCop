@@ -60,7 +60,7 @@ public class Print extends AppCompatActivity {
         txtLote = (TextView) findViewById(R.id.txtLote);
 
         //descargar imagen desde URL
-        new DownloadImageTask(imagePalito).execute("http://images.imcap.cl/cbt114mm/savory.png");
+        new DownloadImageTask(imagePalito).execute("http://images.imcap.cl/ph93mm/sinmarca.png");
 
         //generateDatamatrix("datamatrix test 01");
         writeQRcode((String) txtLote.getText());

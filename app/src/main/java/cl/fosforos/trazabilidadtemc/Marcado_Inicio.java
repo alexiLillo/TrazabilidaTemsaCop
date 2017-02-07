@@ -213,7 +213,7 @@ public class Marcado_Inicio extends AppCompatActivity {
     public ArrayList<String> llenalistaMarcaTipoCod() {
         Connection con = helperSQLServer.CONN();
         ArrayList<String> lista = new ArrayList<>();
-        String query = "select TM_Codigo from TIPOS_MARCAS Where TM_Codigo>0 order by TM_Codigo";
+        String query = "select TM_Codigo from TIPOS_MARCAS Where TM_Codigo=1 order by TM_Codigo";
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -231,7 +231,7 @@ public class Marcado_Inicio extends AppCompatActivity {
     public ArrayList<String> llenalistaMarcaTipoDes() {
         Connection con = helperSQLServer.CONN();
         ArrayList<String> lista = new ArrayList<>();
-        String query = "select TM_Descrip from TIPOS_MARCAS Where TM_Codigo>0 order by TM_Codigo";
+        String query = "select TM_Descrip from TIPOS_MARCAS Where TM_Codigo=1 order by TM_Codigo";
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
