@@ -177,7 +177,7 @@ public class Marcado_Inicio extends AppCompatActivity {
     public ArrayList<String> llenalistaMarcaCod() {
         Connection con = helperSQLServer.CONN();
         ArrayList<String> lista = new ArrayList<>();
-        String query = "select Marca_Codigo from MARCAS order by Marca_Descrip";
+        String query = "select Marca_Codigo from MARCAS EXCEPT Select * from MARCAS where Marca_Codigo=0 order by Marca_Descrip";
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -195,7 +195,7 @@ public class Marcado_Inicio extends AppCompatActivity {
     public ArrayList<String> llenalistaMarcaDes() {
         Connection con = helperSQLServer.CONN();
         ArrayList<String> lista = new ArrayList<>();
-        String query = "select Marca_Descrip from MARCAS order by Marca_Descrip";
+        String query = "select Marca_Descrip from MARCAS EXCEPT Select * from MARCAS where Marca_Codigo=0 order by Marca_Descrip";
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);

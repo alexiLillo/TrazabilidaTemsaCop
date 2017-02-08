@@ -74,9 +74,17 @@
 
         <Spinner
             android:layout_marginLeft="10sp"
+            android:layout_marginBottom="16dp"
             android:layout_width="match_parent"
             android:layout_height="30sp"
             android:id="@+id/spinerPTerminado"/>
+
+        <Spinner
+            android:layout_marginLeft="10sp"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:id="@+id/spinerMarca"/>
 
     </LinearLayout>
 
@@ -155,6 +163,7 @@
             />
     </LinearLayout>
 
+<!--
     <LinearLayout
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -187,6 +196,7 @@
             android:textSize="10sp"
             />
     </LinearLayout>
+-->
 
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -212,6 +222,7 @@
             android:textAlignment="textStart"
             />
 
+        <!--
         <Button
             android:text="Agregar"
             android:layout_width="wrap_content"
@@ -219,6 +230,7 @@
             android:id="@+id/botAgregaCaj"
             android:textSize="10sp"
             />
+            -->
     </LinearLayout>
 
     <LinearLayout
@@ -226,24 +238,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginLeft="90sp"
-        android:layout_marginRight="90sp">
+        android:layout_marginRight="90sp"
+        android:weightSum="1">
 
         <Button
             android:layout_marginTop="16dp"
-            android:text="Capturar Código QR"
-            android:layout_width="match_parent"
+            android:text="Capturar Códigos QR"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/botLeerQR"
-            />
+            android:id="@+id/botLeerQR" />
 
     </LinearLayout>
 
     <Button
-        android:text="Grabar"
-        android:layout_width="match_parent"
+        android:text="Re-imprimir etiqueta"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/botGrabar"
-        android:layout_marginTop="40sp"
+        android:id="@+id/btReimprimir"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center"
         />
 
     <LinearLayout
