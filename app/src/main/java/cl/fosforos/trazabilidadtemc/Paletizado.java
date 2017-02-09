@@ -280,15 +280,17 @@ public class Paletizado extends AppCompatActivity {
 
             while (rs.next()) {
                 if (marca_codigo == 0) {
-                    if (rs.getInt("Caj_IDPal") == 0 && prol_codprodbase == rs.getInt("Caj_CodProdBase") && prol_codindi_fajgran == rs.getInt("Caj_CodIndi_FajGran") && (marca_codigo == rs.getInt("Caj_CodMarca_MAR") || rs.getInt("Caj_CodMarca_MAR") == 18)) {
-                        Caj_LetraCajTraz = rs.getString("Caj_LetraCajTraz");
-                        Caj_NumCajTraz = rs.getInt("Caj_NumCajTraz");
+                    if (rs.getInt("Caj_IDPal") == 0 && prol_codprodbase == rs.getInt("Caj_CodProdBase") && prol_codindi_fajgran == rs.getInt("Caj_CodIndi_FajGran") && (marca_codigo == rs.getInt("Caj_CodMarca_MAR") || rs.getInt("Caj_CodMarca_MAR") == 18))
                         valida = true;
-                    }
+
                 } else {
                     if (rs.getInt("Caj_IDPal") == 0 && prol_codprodbase == rs.getInt("Caj_CodProdBase") && prol_codindi_fajgran == rs.getInt("Caj_CodIndi_FajGran") && marca_codigo == rs.getInt("Caj_CodMarca_MAR"))
                         valida = true;
                 }
+
+                Caj_LetraCajTraz = rs.getString("Caj_LetraCajTraz");
+                Caj_NumCajTraz = rs.getInt("Caj_NumCajTraz");
+
             }
             con.close();
         } catch (Exception ex) {
@@ -329,9 +331,23 @@ public class Paletizado extends AppCompatActivity {
                         ok();
                         scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
                     } else {
+                        //ventana emergente con datos de caja invalida
                         error();
-                        Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
-                        scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
+                        //Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
+                        //scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setMessage(infoCajaTraz())
+                                .setTitle("Atención! Caja inválida, QR: " + scanContent)
+                                .setCancelable(false)
+                                .setPositiveButton("Ok",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
+                                            }
+                                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
                     }
                 }
 
@@ -370,6 +386,33 @@ public class Paletizado extends AppCompatActivity {
             error();
             Toast.makeText(this, "NO SE ESCANEO NINGUN CODIGO", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String infoCajaTraz() {
+        String info = "";
+        Connection con = helperSQLServer.CONN();
+        String query = "Select * from VIS_CAJA_TRAZABLE where Caj_LetraCajTraz='" + Caj_LetraCajTraz + "' and Caj_NumCajTraz='" + Caj_NumCajTraz + "'";
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String fajado;
+                if (rs.getInt("Caj_CodIndi_FajGran") == 1)
+                    fajado = "SI";
+                else
+                    fajado = "NO";
+
+                info =    "COD. CAJA:\t" + Caj_LetraCajTraz + "-" + Caj_NumCajTraz + "\n"
+                        + "PROD. BASE:\t" + rs.getString("PB_Descrip") + "\n"
+                        + "MARCA:\t" + rs.getString("Marca_Descrip") + "\n"
+                        + "FAJADO:\t" + fajado + "\n"
+                        + "COD. PALLET:\t" + rs.getString("Pal_CodPallet");
+            }
+            con.close();
+        } catch (Exception ex) {
+            //error
+        }
+        return info;
     }
 
     public void insertarPallet(int pal_codemp, int pal_idpal, int pal_codturno, String pal_codprod_loc, int pal_corremensu, String pal_codpallet, int pal_canticajas, int pal_fichaoper, String pal_nombreoper, int pal_fichaccali, String pal_nombccali) {
@@ -435,12 +478,51 @@ public class Paletizado extends AppCompatActivity {
     }
 
     public void updateTrazaCaja(int caj_idpal) {
+        //traer datos de TIPOS_MPRIMAS
+        String Caj_MP_Envase = "", Caj_MP_Tinta = "", Caj_MP_Papel = "", Caj_MP_Parafina = "", Caj_MP_Adhesivo = "";
+        //String MP_Env_PH93 = "", MP_Env_PHCBT114 = "", MP_Env_CBT93, MP_Parafina = "", MP_AdhesivoCBT = "", MP_AdhesivoPH = "", MP_Tinta = "", MP_Papel = "";
+        String query0 = "Select * from TIPOS_MPRIMAS";
+        try {
+            Connection con0 = helperSQLServer.CONN();
+            Statement stmt0 = con0.createStatement();
+            ResultSet rs0 = stmt0.executeQuery(query0);
+            while (rs0.next()) {
+
+                if (prol_codprodbase == 1) {
+                    Caj_MP_Envase = rs0.getString("MP_Env_PH93");
+                } else if (prol_codprodbase == 2 || prol_codprodbase == 4) {
+                    Caj_MP_Envase = rs0.getString("MP_Env_PHCBT114");
+                } else if (prol_codprodbase == 3) {
+                    Caj_MP_Envase = rs0.getString("MP_Env_CBT93");
+                }
+
+                if (prol_codindi_marsinmar == 1)
+                    Caj_MP_Tinta = rs0.getString("MP_Tinta");
+
+                if (prol_codindi_fajgran == 1)
+                    Caj_MP_Papel = rs0.getString("MP_Papel");
+
+                Caj_MP_Parafina = rs0.getString("MP_Parafina");
+
+                if (prol_codprodbase == 1 || prol_codprodbase == 2) {
+                    Caj_MP_Adhesivo = rs0.getString("MP_AdhesivoPH");
+                } else if (prol_codprodbase == 3 || prol_codprodbase == 4) {
+                    Caj_MP_Adhesivo = rs0.getString("MP_AdhesivoCBT");
+                }
+
+            }
+            con0.close();
+        } catch (Exception ex) {
+            //error
+        }
+
+        //ACTUALIZAR TRAZA_CAJA
         try {
             Connection con = helperSQLServer.CONN();
             if (con == null) {
             } else {
                 //Consulta SQL
-                String query = "update TRAZA_CAJA set Caj_IDPal='" + caj_idpal + "' where Caj_LetraCajTraz='" + Caj_LetraCajTraz + "' Caj_NumCajTraz='" + Caj_NumCajTraz + "'";
+                String query = "update TRAZA_CAJA set Caj_IDPal='" + caj_idpal + "', Caj_MP_Envase='" + Caj_MP_Envase + "', Caj_MP_Tinta='" + Caj_MP_Tinta + "', Caj_MP_Papel='" + Caj_MP_Papel + "', Caj_MP_Parafina='" + Caj_MP_Parafina + "', Caj_MP_Adhesivo='" + Caj_MP_Adhesivo + "' where Caj_LetraCajTraz='" + Caj_LetraCajTraz + "' and Caj_NumCajTraz='" + Caj_NumCajTraz + "'";
                 Statement stmt = con.createStatement();
                 stmt.executeUpdate(query);
                 con.close();
