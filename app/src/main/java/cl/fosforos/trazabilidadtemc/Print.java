@@ -60,10 +60,12 @@ public class Print extends AppCompatActivity {
         txtLote = (TextView) findViewById(R.id.txtLote);
 
         //descargar imagen desde URL
-        new DownloadImageTask(imagePalito).execute("http://images.imcap.cl/ph93mm/sinmarca.png");
+        new DownloadImageTask(imagePalito).execute("http://192.168.4.180/temsaImages/PH93mm/donofrio.png");
 
         //generateDatamatrix("datamatrix test 01");
         writeQRcode((String) txtLote.getText());
+
+
     }
 
     //asignar imagen URL a un imageView
@@ -89,6 +91,10 @@ public class Print extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
+
+
+            Bitmap rotatedBitmap = rotateBitmap(ConvertToBitmap(layout), 90);
+            printBitmap(rotatedBitmap);
         }
     }
 

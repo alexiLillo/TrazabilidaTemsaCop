@@ -1,5 +1,6 @@
 package cl.fosforos.trazabilidadtemc;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -328,6 +329,10 @@ public class Paletizado extends AppCompatActivity {
 
                         escaneos += 1;
                         txtCantCajas.setText(String.valueOf(cantidadCajas));
+
+                        Intent intent = new Intent(this, Print.class);
+                        startActivity(intent);
+
                         ok();
                         scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
                     } else {
