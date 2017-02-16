@@ -33,7 +33,7 @@ import BaseDatos.ConexionHelperSQLServer;
 public class Paletizado extends AppCompatActivity {
 
     TextView txtturno, txtturnoIni, txtturnoFin, txtturnoCod, txtCodPallet, txtCantCajas, txtOperador, txtCCalidad;
-    Spinner spinerPTerminado, spinerMarca;
+    Spinner spinerPTerminado, spinerMarca, spinerCliente;
     Button botLeerQR, btReimprimir;
     String scanContent, scanFormat, fechahora, PT_DiaProceso, PT_MesProceso, PT_AñoProceso, correMensu, Caj_LetraCajTraz, rutOper, rutCCalidad;
     private ConexionHelperSQLServer helperSQLServer;
@@ -59,6 +59,7 @@ public class Paletizado extends AppCompatActivity {
         txtturnoCod = (TextView) findViewById(R.id.txtTurnoCodigo);
         spinerPTerminado = (Spinner) findViewById(R.id.spinerPTerminado);
         spinerMarca = (Spinner) findViewById(R.id.spinerMarca);
+        spinerCliente = (Spinner) findViewById(R.id.spinerCliente);
         txtOperador = (TextView) findViewById(R.id.txtOperador);
         txtCCalidad = (TextView) findViewById(R.id.txtCCalidad);
         txtCodPallet = (TextView) findViewById(R.id.txtCodPallet);
@@ -136,6 +137,9 @@ public class Paletizado extends AppCompatActivity {
                 if (!spinerMarca.getItemAtPosition(position).toString().contains("Seleccione")) {
                     String[] cadena = spinerMarca.getItemAtPosition(position).toString().split(" - ");
                     marca_codigo = Integer.parseInt(cadena[1]);
+
+                    ArrayAdapter adapterClientes = new ArrayAdapter(view.getContext(), android.R.layout.simple_spinner_dropdown_item, llenalistaClientes(prol_codigo, marca_codigo));
+                    spinerCliente.setAdapter(adapterClientes);
                 }
             }
 
@@ -257,6 +261,28 @@ public class Paletizado extends AppCompatActivity {
             while (rs.next()) {
                 lista.add(rs.getString("Marca_Descrip") + " - " + rs.getString("Marca_Codigo"));
             }
+            con.close();
+        } catch (Exception ex) {
+            //error
+        }
+        return lista;
+    }
+
+    public ArrayList<String> llenalistaClientes(String impe_codplocal, int impe_codmarca) {
+        Connection con = helperSQLServer.CONN();
+        ArrayList<String> lista = new ArrayList<>();
+        String query = "Select * from Vis_IMPRESIONETIQ where ImpE_CodPLocal='" + impe_codplocal + "' and ImpE_CodMarca='" + impe_codmarca + "'";
+        try {
+            int count = 0;
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                lista.add(rs.getString("Clie_Nombre") + " - " + rs.getString("ImpE_CodCliente"));
+                count++;
+            }
+            System.out.println(impe_codplocal + " - " +  impe_codmarca + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+lista.toString());
+            if(count > 1)
+                lista.add("Seleccione Cliente");
             con.close();
         } catch (Exception ex) {
             //error

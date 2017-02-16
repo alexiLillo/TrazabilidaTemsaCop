@@ -86,6 +86,13 @@
             android:layout_height="30sp"
             android:id="@+id/spinerMarca"/>
 
+        <Spinner
+            android:layout_marginLeft="10sp"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:id="@+id/spinerCliente"/>
+
     </LinearLayout>
 
     <LinearLayout
