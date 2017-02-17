@@ -255,6 +255,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/botLeerQR" />
 
+        <!--Button
+            android:text="prueba impresion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btPrintTest"
+            android:layout_marginTop="80dp"
+            android:layout_gravity="center"
+            android:onClick="printTest"
+            /-->
+
     </LinearLayout>
 
     <Button
@@ -265,6 +275,7 @@
         android:layout_marginTop="80dp"
         android:layout_gravity="center"
         />
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -39,11 +39,14 @@ public class Paletizado extends AppCompatActivity {
     private ConexionHelperSQLServer helperSQLServer;
     public int escaneos = 0, cantidadCajas = 0;
     //variables de PRODTERM_LOCAL
-    public int prol_codprodbase = -1, prol_codindi_fajgran = -1, prol_codindi_marsinmar = -1, prol_palxcaj = -1, marca_codigo = -1, operFicha, Caj_NumCajTraz;
+    public int prol_codprodbase = -1, prol_codindi_fajgran = -1, prol_codindi_marsinmar = -1, prol_palxcaj = -1, marca_codigo = -1, operFicha, Caj_NumCajTraz, cod_cliente;
 
     private int LastIdPal = 0;
 
     String prol_codigo;
+
+    //ETIQUETADO
+    private String etiq_producto, etiq_contenido, etiq_cliente, etiq_caja, etiq_lote, etiq_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,21 @@ public class Paletizado extends AppCompatActivity {
 
                     ArrayAdapter adapterClientes = new ArrayAdapter(view.getContext(), android.R.layout.simple_spinner_dropdown_item, llenalistaClientes(prol_codigo, marca_codigo));
                     spinerCliente.setAdapter(adapterClientes);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinerCliente.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!spinerCliente.getItemAtPosition(position).toString().contains("Seleccione")) {
+                    String[] cadena = spinerCliente.getItemAtPosition(position).toString().split(" - ");
+                    cod_cliente = Integer.parseInt(cadena[1]);
                 }
             }
 
@@ -280,8 +298,8 @@ public class Paletizado extends AppCompatActivity {
                 lista.add(rs.getString("Clie_Nombre") + " - " + rs.getString("ImpE_CodCliente"));
                 count++;
             }
-            System.out.println(impe_codplocal + " - " +  impe_codmarca + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+lista.toString());
-            if(count > 1)
+            System.out.println(impe_codplocal + " - " + impe_codmarca + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + lista.toString());
+            if (count > 1)
                 lista.add("Seleccione Cliente");
             con.close();
         } catch (Exception ex) {
@@ -356,7 +374,14 @@ public class Paletizado extends AppCompatActivity {
                         escaneos += 1;
                         txtCantCajas.setText(String.valueOf(cantidadCajas));
 
+                        //LLENAR PARAMETROS DE ETIQUETA ANTES DE ENVIAR
+                        cargarParametrosEtiquetas();
                         Intent intent = new Intent(this, Print.class);
+                        intent.putExtra("etiq_producto", etiq_producto);
+                        intent.putExtra("etiq_contenido", etiq_contenido);
+                        intent.putExtra("etiq_cliente", etiq_cliente);
+                        intent.putExtra("etiq_lote", "LOTE: " + txtCodPallet.getText().toString());
+                        intent.putExtra("etiq_url", etiq_url);
                         startActivity(intent);
 
                         ok();
@@ -419,6 +444,37 @@ public class Paletizado extends AppCompatActivity {
         }
     }
 
+    /*public void printTest(View view){
+        Intent intent = new Intent(this, Print.class);
+        intent.putExtra("etiq_producto", "PH 93 mm FAJADO IMPRESO");
+        intent.putExtra("etiq_contenido", "CONTENIDO: 0 UNIDADES");
+        intent.putExtra("etiq_cliente", "DONOFRIO");
+        intent.putExtra("etiq_caja", "CAJA: 123456789");
+        intent.putExtra("etiq_lote", "LOTE: 12345679");
+        intent.putExtra("etiq_url", "http://192.168.4.180/temsaImages/PH93mm/donofrio.png");
+        startActivity(intent);
+    }*/
+
+    public void cargarParametrosEtiquetas() {
+        Connection con = helperSQLServer.CONN();
+        String query = "Select * from Vis_IMPRESIONETIQ where ImpE_CodPLocal='" + prol_codigo +"' and ImpE_CodMarca='" + marca_codigo +"' and ImpE_CodCliente='" + cod_cliente +"'";
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                etiq_producto = rs.getString("ImpE_Fila1");
+                etiq_contenido = rs.getString("ImpE_Fila2");
+                etiq_cliente = rs.getString("ImpE_Fila3");
+                etiq_caja = Caj_LetraCajTraz + "-" + Caj_NumCajTraz;
+                //etiq_lote = "LOTE: " + ;
+                etiq_url = rs.getString("ImpE_UrlImagen");
+            }
+            con.close();
+        } catch (Exception ex) {
+            //error
+        }
+    }
+
     public String infoCajaTraz() {
         String info = "";
         Connection con = helperSQLServer.CONN();
@@ -433,7 +489,7 @@ public class Paletizado extends AppCompatActivity {
                 else
                     fajado = "NO";
 
-                info =    "COD. CAJA:\t" + Caj_LetraCajTraz + "-" + Caj_NumCajTraz + "\n"
+                info = "COD. CAJA:\t" + Caj_LetraCajTraz + "-" + Caj_NumCajTraz + "\n"
                         + "PROD. BASE:\t" + rs.getString("PB_Descrip") + "\n"
                         + "MARCA:\t" + rs.getString("Marca_Descrip") + "\n"
                         + "FAJADO:\t" + fajado + "\n"

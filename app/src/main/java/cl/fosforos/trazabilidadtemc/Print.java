@@ -42,10 +42,12 @@ public class Print extends AppCompatActivity {
 
     private LinearLayout layout;
     private static ImageView imageViewDataMatrix;
-    private TextView txtLote;
+    private TextView txtNombreProducto, txtCantidad, txtCliente, txtCaja, txtLote;
 
     private Connection connection;
     private UIHelper helper = new UIHelper(this);
+
+    private String etiq_producto, etiq_contenido, etiq_cliente, etiq_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +56,29 @@ public class Print extends AppCompatActivity {
         getSupportActionBar().setTitle("IMPRIMIR ETIQUETAS");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Bundle bundle = this.getIntent().getExtras();
+
         layout = (LinearLayout) findViewById(R.id.layoutPrint);
         ImageView imagePalito = (ImageView) findViewById(R.id.im1);
         imageViewDataMatrix = (ImageView) findViewById(R.id.datamatrix);
+        txtNombreProducto = (TextView) findViewById(R.id.txtNombreProducto);
+        txtCantidad = (TextView) findViewById(R.id.txtCantidad);
+        txtCliente = (TextView) findViewById(R.id.txtCliente);
+        txtCaja = (TextView) findViewById(R.id.txtCaja);
         txtLote = (TextView) findViewById(R.id.txtLote);
 
+        txtNombreProducto.setText(bundle.getString("etiq_producto"));
+        txtCantidad.setText(bundle.getString("etiq_contenido"));
+        txtCliente.setText(bundle.getString("etiq_cliente"));
+        txtCaja.setText(bundle.getString("etiq_caja"));
+        txtLote.setText(bundle.getString("etiq_lote"));
+
         //descargar imagen desde URL
-        new DownloadImageTask(imagePalito).execute("http://192.168.4.180/temsaImages/PH93mm/donofrio.png");
+        //new DownloadImageTask(imagePalito).execute("http://192.168.4.180/temsaImages/PH93mm/donofrio.png");
+        new DownloadImageTask(imagePalito).execute(bundle.getString("etiq_url"));
 
         //generateDatamatrix("datamatrix test 01");
         writeQRcode((String) txtLote.getText());
-
-
     }
 
     //asignar imagen URL a un imageView
@@ -142,10 +155,11 @@ public class Print extends AppCompatActivity {
                     if (printerStatus.isReadyToPrint) {
                         try {
                             //helper.showLoadingDialog("Printer Ready \nProcessing to Print.");
-                            helper.showLoadingDialog("Impresora lista\nEnviando información de etiquetas...");
+                            helper.showLoadingDialog("Impresora lista\nEnviando información de etiqueta...");
                             //printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 550, 412, false);
                             //for (int i = 0; i <= 9; i++) {
                             printer.printImage(new ZebraImageAndroid(bitmap), 0, 0, 800, 1200, false);
+                            Print.super.finish();
                             //}
                         } catch (ConnectionException e) {
                             //helper.showErrorDialogOnGuiThread(e.getMessage());
@@ -218,11 +232,11 @@ public class Print extends AppCompatActivity {
     }
 
     //OnBarcode generador de codigos (crea marca de agua)
-    public void generateDatamatrix(String dataValue){
+    public void generateDatamatrix(String dataValue) {
         DataMatrix barcode = new DataMatrix();
 
 	/*
-	   Data Matrix Valid data char set:
+       Data Matrix Valid data char set:
 	        ASCII values 0 - 127 in accordance with the US national version of ISO/IEC 646
 	            ASCII values 128 - 255 in accordance with ISO 8859-1. These are referred to as extended ASCII.
 
@@ -273,7 +287,7 @@ public class Print extends AppCompatActivity {
         Canvas canvas = new Canvas(bitmap);
 
         try {
-            barcode.drawBarcode(canvas,bounds);
+            barcode.drawBarcode(canvas, bounds);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -295,7 +309,7 @@ public class Print extends AppCompatActivity {
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
-                    bitmap.setPixel(i, j, bitMatrix.get(i, j) ? Color.BLACK: Color.WHITE);
+                    bitmap.setPixel(i, j, bitMatrix.get(i, j) ? Color.BLACK : Color.WHITE);
                 }
             }
             imageViewDataMatrix.setImageBitmap(bitmap);
