@@ -71,14 +71,14 @@ public class Print extends AppCompatActivity {
         txtCantidad.setText(bundle.getString("etiq_contenido"));
         txtCliente.setText(bundle.getString("etiq_cliente"));
         txtCaja.setText(bundle.getString("etiq_caja"));
-        txtLote.setText(bundle.getString("etiq_lote"));
+        txtLote.setText("LOTE: " + bundle.getString("etiq_lote"));
 
         //descargar imagen desde URL
         //new DownloadImageTask(imagePalito).execute("http://192.168.4.180/temsaImages/PH93mm/donofrio.png");
         new DownloadImageTask(imagePalito).execute(bundle.getString("etiq_url"));
 
         //generateDatamatrix("datamatrix test 01");
-        writeQRcode((String) txtLote.getText());
+        writeQRcode(bundle.getString("etiq_lote"));
     }
 
     //asignar imagen URL a un imageView

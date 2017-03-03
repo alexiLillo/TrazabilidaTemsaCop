@@ -77,16 +77,19 @@ public class Paletizado extends AppCompatActivity {
                     scan("ESCANEAR CODIGO OPERADOR");
                 else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("¿Desea re-escanear los códigos QR?")
+                    builder.setMessage("¿Desea continuar completando el pallet actual (" + txtCodPallet.getText().toString() + ") o generar un nuevo pallet?")
                             .setTitle("Atención!")
                             .setCancelable(false)
-                            .setNegativeButton("Cancelar",
+                            .setNegativeButton("CONTINUAR",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-
+                                            if (escaneos == 1)
+                                                scan("ESCANEAR CODIGO DE CONTROL DE CALIDAD");
+                                            if (escaneos >= 2)
+                                                scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
                                         }
                                     })
-                            .setPositiveButton("Re-escanear",
+                            .setPositiveButton("NUEVO PALLET",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             clearLocalData();
@@ -380,7 +383,7 @@ public class Paletizado extends AppCompatActivity {
                         intent.putExtra("etiq_producto", etiq_producto);
                         intent.putExtra("etiq_contenido", etiq_contenido);
                         intent.putExtra("etiq_cliente", etiq_cliente);
-                        intent.putExtra("etiq_lote", "LOTE: " + txtCodPallet.getText().toString());
+                        intent.putExtra("etiq_lote", txtCodPallet.getText().toString());
                         intent.putExtra("etiq_url", etiq_url);
                         startActivity(intent);
 

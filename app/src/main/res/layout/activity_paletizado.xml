@@ -250,7 +250,7 @@
 
         <Button
             android:layout_marginTop="16dp"
-            android:text="Capturar Códigos QR"
+            android:text="Armar pallet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/botLeerQR" />
