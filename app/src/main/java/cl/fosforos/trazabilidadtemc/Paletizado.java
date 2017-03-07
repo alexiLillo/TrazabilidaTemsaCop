@@ -46,7 +46,7 @@ public class Paletizado extends AppCompatActivity {
     String prol_codigo;
 
     //ETIQUETADO
-    private String etiq_producto, etiq_contenido, etiq_cliente, etiq_caja, etiq_lote, etiq_url;
+    private String etiq_producto, etiq_contenido, etiq_cliente, etiq_caja, etiq_lote, etiq_url, tipoScaneo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,26 +74,29 @@ public class Paletizado extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (escaneos == 0)
-                    scan("ESCANEAR CODIGO OPERADOR");
+                    scan("ESCANEAR CODIGO OPERADOR", "imp");
                 else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("¿Desea continuar completando el pallet actual (" + txtCodPallet.getText().toString() + ") o generar un nuevo pallet?")
+                    builder.setMessage("¿Desea continuar completando el último pallet  (" + txtCodPallet.getText().toString() + ") o generar un nuevo pallet?")
                             .setTitle("Atención!")
                             .setCancelable(false)
                             .setNegativeButton("CONTINUAR",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            if (escaneos == 1)
-                                                scan("ESCANEAR CODIGO DE CONTROL DE CALIDAD");
-                                            if (escaneos >= 2)
-                                                scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
+
+                                            //llamar funcion reanudar pallet
+
+                                            //if (escaneos == 1)
+                                            //    scan("ESCANEAR CODIGO DE CONTROL DE CALIDAD");
+                                            //if (escaneos >= 2)
+                                            //   scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
                                         }
                                     })
                             .setPositiveButton("NUEVO PALLET",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             clearLocalData();
-                                            scan("ESCANEAR CODIGO OPERADOR");
+                                            scan("ESCANEAR CODIGO OPERADOR", "imp");
                                         }
                                     });
                     AlertDialog alert = builder.create();
@@ -356,87 +359,127 @@ public class Paletizado extends AppCompatActivity {
                 scanContent = scanningResult.getContents();
                 scanFormat = scanningResult.getFormatName();
 
-                if (escaneos >= 2) {
-                    //validar caja (aumentar contador), generar pallet (o aumnetar cajas de pallet), actualizar idpallet en la caja e imprimir etiqueta, repetir proceso
+                if (tipoScaneo.equals("reimp")) {
+
                     if (validarCaja(scanContent)) {
-                        cantidadCajas += 1;
-                        if (cantidadCajas == 1) {
-                            //agregar pallet(LastIdPallet + 1)
-                            getLastIdPallet();
-                            LastIdPal += 1;
-
-                            insertarPallet(2, LastIdPal, Integer.parseInt(txtturnoCod.getText().toString()), prol_codigo, Integer.parseInt(correMensu), txtCodPallet.getText().toString(), cantidadCajas, getFichaOper(rutOper), getNombreOper(rutOper), getFichaOper(rutCCalidad), getNombreOper(rutCCalidad));
-
-                        } else if (cantidadCajas > 1) {
-                            //actualizar cantidadCajas pallet (LastIdPallet)
-                            updateCantidadCajasPallet(LastIdPal, cantidadCajas);
+                        int caj_idpal = 0;
+                        try {
+                            Connection con = helperSQLServer.CONN();
+                            if (con == null) {
+                            } else {
+                                //Consulta SQL
+                                String query = "Select Caj_IDPal from TRAZA_CAJA where Caj_LetraCajTraz='" + Caj_LetraCajTraz + "' and Caj_NumCajTraz='" + Caj_NumCajTraz + "'";
+                                Statement stmt = con.createStatement();
+                                ResultSet rs = stmt.executeQuery(query);
+                                while (rs.next()) {
+                                    caj_idpal = rs.getInt("Caj_IDPal");
+                                }
+                                con.close();
+                            }
+                        } catch (Exception ex) {
                         }
 
-                        updateTrazaCaja(LastIdPal);
-
-                        escaneos += 1;
-                        txtCantCajas.setText(String.valueOf(cantidadCajas));
-
-                        //LLENAR PARAMETROS DE ETIQUETA ANTES DE ENVIAR
-                        cargarParametrosEtiquetas();
-                        Intent intent = new Intent(this, Print.class);
-                        intent.putExtra("etiq_producto", etiq_producto);
-                        intent.putExtra("etiq_contenido", etiq_contenido);
-                        intent.putExtra("etiq_cliente", etiq_cliente);
-                        intent.putExtra("etiq_lote", txtCodPallet.getText().toString());
-                        intent.putExtra("etiq_url", etiq_url);
-                        startActivity(intent);
-
-                        ok();
-                        scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
+                        if (caj_idpal != 0) {
+                            cargarParametrosEtiquetas();
+                            Intent intent = new Intent(this, Print.class);
+                            intent.putExtra("etiq_producto", etiq_producto);
+                            intent.putExtra("etiq_contenido", etiq_contenido);
+                            intent.putExtra("etiq_cliente", etiq_cliente);
+                            intent.putExtra("etiq_lote", txtCodPallet.getText().toString());
+                            intent.putExtra("etiq_url", etiq_url);
+                            startActivity(intent);
+                        } else {
+                            error();
+                            Toast.makeText(this, "CAJA NO VALIDA, EL CODIGO NO CORRESPONDE A UNA CAJA PALETIZADA", Toast.LENGTH_LONG).show();
+                        }
                     } else {
-                        //ventana emergente con datos de caja invalida
                         error();
-                        //Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
-                        //scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setMessage(infoCajaTraz())
-                                .setTitle("Atención! Caja inválida, QR: " + scanContent)
-                                .setCancelable(false)
-                                .setPositiveButton("Ok",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
-                                            }
-                                        });
-                        AlertDialog alert = builder.create();
-                        alert.show();
+                        Toast.makeText(this, "ERROR, ASEGURESE DE SELECCIONAR TODOS LOS DATOS CORRECTAMENTE Y DE QUE SEA UNA CAJA VALIDA PALETIZADA", Toast.LENGTH_LONG).show();
                     }
-                }
 
-                if (escaneos == 1) {
-                    //escanear CCalidad (VALIDAR CCALIDAD)
-                    if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {
-                        rutCCalidad = scanContent;
-                        txtCCalidad.setText(getNombreOper(rutCCalidad));
-                        escaneos = 2;
-                        ok();
-                        scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
-                    } else {
-                        error();
-                        Toast.makeText(this, "CODIGO DE CONTROL DE CALIDAD INVALIDO", Toast.LENGTH_SHORT).show();
-                        scan("ESCANEAR CODIGO DE CONTROL DE CALIDAD");
+                } else if (tipoScaneo.equals("imp")) {
+                    if (escaneos >= 2) {
+                        //validar caja (aumentar contador), generar pallet (o aumnetar cajas de pallet), actualizar idpallet en la caja e imprimir etiqueta, repetir proceso
+                        if (validarCaja(scanContent)) {
+                            cantidadCajas += 1;
+                            if (cantidadCajas == 1) {
+                                //agregar pallet(LastIdPallet + 1)
+                                getLastIdPallet();
+                                LastIdPal += 1;
+
+                                insertarPallet(2, LastIdPal, Integer.parseInt(txtturnoCod.getText().toString()), prol_codigo, Integer.parseInt(correMensu), txtCodPallet.getText().toString(), cantidadCajas, getFichaOper(rutOper), getNombreOper(rutOper), getFichaOper(rutCCalidad), getNombreOper(rutCCalidad));
+
+                            } else if (cantidadCajas > 1) {
+                                //actualizar cantidadCajas pallet (LastIdPallet)
+                                updateCantidadCajasPallet(LastIdPal, cantidadCajas);
+                            }
+
+                            updateTrazaCaja(LastIdPal);
+
+                            escaneos += 1;
+                            txtCantCajas.setText(String.valueOf(cantidadCajas));
+
+                            //LLENAR PARAMETROS DE ETIQUETA ANTES DE ENVIAR
+                            cargarParametrosEtiquetas();
+                            Intent intent = new Intent(this, Print.class);
+                            intent.putExtra("etiq_producto", etiq_producto);
+                            intent.putExtra("etiq_contenido", etiq_contenido);
+                            intent.putExtra("etiq_cliente", etiq_cliente);
+                            intent.putExtra("etiq_lote", txtCodPallet.getText().toString());
+                            intent.putExtra("etiq_url", etiq_url);
+                            startActivity(intent);
+
+                            ok();
+                            scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas, "imp");
+                        } else {
+                            //ventana emergente con datos de caja invalida
+                            error();
+                            //Toast.makeText(this, "CODIGO DE CAJA INVALIDO", Toast.LENGTH_SHORT).show();
+                            //scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas);
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                            builder.setMessage(infoCajaTraz())
+                                    .setTitle("Atención! Caja inválida, QR: " + scanContent)
+                                    .setCancelable(false)
+                                    .setPositiveButton("Ok",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas, "imp");
+                                                }
+                                            });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
                     }
-                }
 
-                if (escaneos == 0) {
-                    //escanear Operador (VALIDAR OPERADOR)
-                    if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {
-                        rutOper = scanContent;
-                        txtOperador.setText(getNombreOper(rutOper));
-                        escaneos = 1;
-                        ok();
-                        scan("ESCANEAR CODIGO DE CONTROL DE CALIDAD");
-                    } else {
-                        error();
-                        Toast.makeText(this, "CODIGO DE OPERADOR INVALIDO", Toast.LENGTH_SHORT).show();
-                        scan("ESCANEAR CODIGO OPERADOR");
+                    if (escaneos == 1) {
+                        //escanear CCalidad (VALIDAR CCALIDAD)
+                        if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {
+                            rutCCalidad = scanContent;
+                            txtCCalidad.setText(getNombreOper(rutCCalidad));
+                            escaneos = 2;
+                            ok();
+                            scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas, "imp");
+                        } else {
+                            error();
+                            Toast.makeText(this, "CODIGO DE CONTROL DE CALIDAD INVALIDO", Toast.LENGTH_SHORT).show();
+                            scan("ESCANEAR CODIGO DE CONTROL DE CALIDAD", "imp");
+                        }
+                    }
+
+                    if (escaneos == 0) {
+                        //escanear Operador (VALIDAR OPERADOR)
+                        if (scanContent.substring(0, scanContent.length() - 1).endsWith("-")) {
+                            rutOper = scanContent;
+                            txtOperador.setText(getNombreOper(rutOper));
+                            escaneos = 1;
+                            ok();
+                            scan("ESCANEAR CODIGO DE CONTROL DE CALIDAD", "imp");
+                        } else {
+                            error();
+                            Toast.makeText(this, "CODIGO DE OPERADOR INVALIDO", Toast.LENGTH_SHORT).show();
+                            scan("ESCANEAR CODIGO OPERADOR", "imp");
+                        }
                     }
                 }
 
@@ -460,7 +503,7 @@ public class Paletizado extends AppCompatActivity {
 
     public void cargarParametrosEtiquetas() {
         Connection con = helperSQLServer.CONN();
-        String query = "Select * from Vis_IMPRESIONETIQ where ImpE_CodPLocal='" + prol_codigo +"' and ImpE_CodMarca='" + marca_codigo +"' and ImpE_CodCliente='" + cod_cliente +"'";
+        String query = "Select * from Vis_IMPRESIONETIQ where ImpE_CodPLocal='" + prol_codigo + "' and ImpE_CodMarca='" + marca_codigo + "' and ImpE_CodCliente='" + cod_cliente + "'";
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -621,7 +664,12 @@ public class Paletizado extends AppCompatActivity {
         }
     }
 
-    public void scan(String titulo) {
+    public void reImprimirEtiqueta(View view) {
+        scan("ESCANEAR CAJA PARA RE-IMPRIMIR ETIQUETA", "reimp");
+    }
+
+    public void scan(String titulo, String tipo) {
+        tipoScaneo = tipo;
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setPrompt(titulo);
         scanIntegrator.setBeepEnabled(false);
