@@ -24,6 +24,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -381,13 +382,7 @@ public class Paletizado extends AppCompatActivity {
 
                         if (caj_idpal != 0) {
                             cargarParametrosEtiquetas();
-                            Intent intent = new Intent(this, Print.class);
-                            intent.putExtra("etiq_producto", etiq_producto);
-                            intent.putExtra("etiq_contenido", etiq_contenido);
-                            intent.putExtra("etiq_cliente", etiq_cliente);
-                            intent.putExtra("etiq_lote", txtCodPallet.getText().toString());
-                            intent.putExtra("etiq_url", etiq_url);
-                            startActivity(intent);
+
                         } else {
                             error();
                             Toast.makeText(this, "CAJA NO VALIDA, EL CODIGO NO CORRESPONDE A UNA CAJA PALETIZADA", Toast.LENGTH_LONG).show();
@@ -407,7 +402,8 @@ public class Paletizado extends AppCompatActivity {
                                 getLastIdPallet();
                                 LastIdPal += 1;
 
-                                insertarPallet(2, LastIdPal, Integer.parseInt(txtturnoCod.getText().toString()), prol_codigo, Integer.parseInt(correMensu), txtCodPallet.getText().toString(), cantidadCajas, getFichaOper(rutOper), getNombreOper(rutOper), getFichaOper(rutCCalidad), getNombreOper(rutCCalidad));
+                                short asd = 2;
+                                insertarPallet(asd, LastIdPal, Integer.parseInt(txtturnoCod.getText().toString()), prol_codigo, Integer.parseInt(correMensu), txtCodPallet.getText().toString(), cantidadCajas, getFichaOper(rutOper), getNombreOper(rutOper), getFichaOper(rutCCalidad), getNombreOper(rutCCalidad), cod_cliente);
 
                             } else if (cantidadCajas > 1) {
                                 //actualizar cantidadCajas pallet (LastIdPallet)
@@ -418,19 +414,13 @@ public class Paletizado extends AppCompatActivity {
 
                             escaneos += 1;
                             txtCantCajas.setText(String.valueOf(cantidadCajas));
+                            ok();
 
                             //LLENAR PARAMETROS DE ETIQUETA ANTES DE ENVIAR
                             cargarParametrosEtiquetas();
-                            Intent intent = new Intent(this, Print.class);
-                            intent.putExtra("etiq_producto", etiq_producto);
-                            intent.putExtra("etiq_contenido", etiq_contenido);
-                            intent.putExtra("etiq_cliente", etiq_cliente);
-                            intent.putExtra("etiq_lote", txtCodPallet.getText().toString());
-                            intent.putExtra("etiq_url", etiq_url);
-                            startActivity(intent);
 
-                            ok();
-                            scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas, "imp");
+
+                            //scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas, "imp");
                         } else {
                             //ventana emergente con datos de caja invalida
                             error();
@@ -519,6 +509,15 @@ public class Paletizado extends AppCompatActivity {
         } catch (Exception ex) {
             //error
         }
+
+        Intent intent = new Intent(this, Print.class);
+        intent.putExtra("etiq_producto", etiq_producto);
+        intent.putExtra("etiq_contenido", etiq_contenido);
+        intent.putExtra("etiq_cliente", etiq_cliente);
+        intent.putExtra("etiq_caja", etiq_caja);
+        intent.putExtra("etiq_lote", txtCodPallet.getText().toString());
+        intent.putExtra("etiq_url", etiq_url);
+        startActivity(intent);
     }
 
     public String infoCajaTraz() {
@@ -548,18 +547,19 @@ public class Paletizado extends AppCompatActivity {
         return info;
     }
 
-    public void insertarPallet(int pal_codemp, int pal_idpal, int pal_codturno, String pal_codprod_loc, int pal_corremensu, String pal_codpallet, int pal_canticajas, int pal_fichaoper, String pal_nombreoper, int pal_fichaccali, String pal_nombccali) {
+    public void insertarPallet(int pal_codemp, int pal_idpal, int pal_codturno, String pal_codprod_loc, int pal_corremensu, String pal_codpallet, int pal_canticajas, int pal_fichaoper, String pal_nombreoper, int pal_fichaccali, String pal_nombccali, int cod_cliente) {
         try {
             Connection con = helperSQLServer.CONN();
             if (con == null) {
             } else {
                 //Consulta SQL
-                String query = "insert into TRAZA_PALLET values ('" + pal_codemp + "', '" + pal_idpal + "', '" + pal_codturno + "', '" + pal_codprod_loc + "', '" + pal_corremensu + "', '" + pal_codpallet + "', '" + pal_canticajas + "', '" + pal_fichaoper + "', '" + pal_nombreoper + "', '" + pal_fichaccali + "', '" + pal_nombccali + "')";
+                String query = "insert into TRAZA_PALLET values (" + pal_codemp + ", " + pal_idpal + ", " + pal_codturno + ", '" + pal_codprod_loc + "', " + pal_corremensu + ", '" + pal_codpallet + "', " + pal_canticajas + ", " + pal_fichaoper + ", '" + pal_nombreoper + "', " + pal_fichaccali + ", '" + pal_nombccali + "', '" + cod_cliente + "')";
                 Statement stmt = con.createStatement();
                 stmt.executeUpdate(query);
                 con.close();
             }
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + ex.getMessage() + " --- " + ex.getErrorCode());
         }
     }
 
@@ -720,5 +720,12 @@ public class Paletizado extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (cantidadCajas > 1)
+            scan("ESCANEAR CAJAS PRODUCTO TERMINADO, ESCANEADAS: " + cantidadCajas, "imp");
     }
 }

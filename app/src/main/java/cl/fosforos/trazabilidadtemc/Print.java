@@ -70,7 +70,7 @@ public class Print extends AppCompatActivity {
         txtNombreProducto.setText(bundle.getString("etiq_producto"));
         txtCantidad.setText(bundle.getString("etiq_contenido"));
         txtCliente.setText(bundle.getString("etiq_cliente"));
-        txtCaja.setText(bundle.getString("etiq_caja"));
+        txtCaja.setText("CAJA: " + bundle.getString("etiq_caja"));
         txtLote.setText("LOTE: " + bundle.getString("etiq_lote"));
 
         //descargar imagen desde URL

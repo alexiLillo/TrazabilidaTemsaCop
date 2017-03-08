@@ -59,7 +59,7 @@
                             android:layout_height="wrap_content"
                             android:text="PH 114 mm"
                             android:textColor="#000"
-                            android:textSize="35sp"
+                            android:textSize="25sp"
                             android:textStyle="bold" />
 
                         <TextView
